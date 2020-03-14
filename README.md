@@ -1,9 +1,9 @@
 # RayWenderlich
 
-## SealedClasses
+## Sealed Classes
 
-## BeyondTheBasicsWithSealedClasses
+## Beyond The Basics With Sealed Classes
 
-## AndroidStudioTipsAndTricks
+## Android Studio Tips And Tricks
 
-## ConstraintLayoutComplexLayouts
+## Constraint Layout Complex Layouts
