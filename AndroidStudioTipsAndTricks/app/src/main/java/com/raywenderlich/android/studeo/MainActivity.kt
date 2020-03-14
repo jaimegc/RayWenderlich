@@ -116,13 +116,18 @@ class MainActivity : AppCompatActivity() {
     // Option + CMD + V: extract variable
     // Option + CMD + M: extract method
     // Option + CMD + P: extract method parameter
-    Log.d("Studeo Log", ">> printInformation() called")
+    val TAG = "Studeo Log"
+    printLog(TAG)
 
     measureTimeMillis {
-      Log.d("Studeo Log", dataStr)
+      Log.d(TAG, dataStr)
     }
 
-    Log.d("Studeo Log", ">> printInformation() finished")
+    Log.d(TAG, ">> printInformation() finished")
+  }
+
+  private fun printLog(TAG: String) {
+    Log.d(TAG, ">> printInformation() called")
   }
 
   // F6 : Move class
