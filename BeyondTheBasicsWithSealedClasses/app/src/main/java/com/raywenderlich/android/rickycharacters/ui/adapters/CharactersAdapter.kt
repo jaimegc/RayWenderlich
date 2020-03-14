@@ -43,12 +43,10 @@ import kotlinx.android.synthetic.main.list_item_character.view.*
 
 typealias ClickListener = (Character) -> Unit
 
-class CharactersAdapter(private val clickListener: ClickListener) : RecyclerView.Adapter<CharactersAdapter
-.CharactersViewHolder>() {
+class CharactersAdapter(private val clickListener: ClickListener) : RecyclerView.Adapter<CharactersAdapter.CharactersViewHolder>() {
   private var charactersList: List<Character> = ArrayList()
 
-  class CharactersViewHolder(itemView: View, private val clickListener: ClickListener) :
-      RecyclerView.ViewHolder(itemView) {
+  class CharactersViewHolder(itemView: View, private val clickListener: ClickListener) : RecyclerView.ViewHolder(itemView) {
     private val imageViewCharacterImage: ImageView = itemView.imageViewCharacterImage
     private val textViewCharacterName: TextView = itemView.textViewCharacterName
 

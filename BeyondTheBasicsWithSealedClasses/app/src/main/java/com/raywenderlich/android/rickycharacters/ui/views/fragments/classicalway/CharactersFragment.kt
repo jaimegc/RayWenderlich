@@ -33,6 +33,7 @@ package com.raywenderlich.android.rickycharacters.ui.views.fragments.classicalwa
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.raywenderlich.android.rickycharacters.R
 import com.raywenderlich.android.rickycharacters.data.models.Character
@@ -43,6 +44,7 @@ import com.raywenderlich.android.rickycharacters.ui.adapters.CharactersAdapter
 import com.raywenderlich.android.rickycharacters.utils.hide
 import com.raywenderlich.android.rickycharacters.utils.show
 import kotlinx.android.synthetic.main.fragment_characters.*
+import java.io.IOException
 
 class CharactersFragment : Fragment(R.layout.fragment_characters) {
   private val apiService = ApiClient().getClient().create(ApiService::class.java)
@@ -51,37 +53,53 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    charactersAdapter = CharactersAdapter {character ->
-      displayCharacterDetails(character)
-    }
+    charactersAdapter = CharactersAdapter { character -> displayCharacterDetails(character) }
     recyclerViewMovies.adapter = charactersAdapter
     fetchCharacters()
+    showRefreshDialog()
+
     swipeContainer.setOnRefreshListener {
       fetchCharacters()
     }
   }
 
   private fun displayCharacterDetails(character: Character){
-    val characterFragmentAction =
-        CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailsFragment(
-            character)
-    findNavController().navigate(characterFragmentAction)
-
-
+    //val characterFragmentAction =
+        //CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailsFragment(character)
+    //findNavController().navigate(characterFragmentAction)
   }
 
   private fun fetchCharacters() {
-    //TODO 1 Make a get characters Request
+    lifecycleScope.launchWhenStarted {
+      try {
+        val response = apiService.getCharacters()
+        val characters = response.body()
 
-    //TODO 2 Catch errors with else statement
-
-    //TODO 3 Catch errors with try-catch statement
-
-    //TODO 4 Catch HTTP error codes
-
-    //TODO 5 Add refresh dialog
-
-    //TODO 6 Handle null response body
+        if (response.isSuccessful) {
+          if (response.body() != null) {
+            hideEmptyView()
+            showCharacters(characters)
+          } else {
+            showEmptyView()
+            handleError("No characters found")
+          }
+        } else {
+          showEmptyView()
+          when(response.code()) {
+            403 -> handleError("Access to resource is forbidden")
+            404 -> handleError("Resource not found")
+            500 -> handleError("Internal server error")
+            502 -> handleError("Bad Gateway")
+            301 -> handleError("Resource has been removed permanently")
+            302 -> handleError("Resource moved, but has been found")
+            else -> handleError("All cases have not been covered!!")
+          }
+        }
+      } catch (error: IOException) {
+        showEmptyView()
+        error.message?.let { message -> handleError(message) }
+      }
+    }
   }
 
   private fun showCharacters(charactersResponseModel: CharactersResponseModel?) {

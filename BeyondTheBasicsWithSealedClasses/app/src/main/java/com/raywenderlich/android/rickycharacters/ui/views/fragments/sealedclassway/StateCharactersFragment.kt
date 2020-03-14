@@ -33,16 +33,19 @@ package com.raywenderlich.android.rickycharacters.ui.views.fragments.sealedclass
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.raywenderlich.android.rickycharacters.R
 import com.raywenderlich.android.rickycharacters.data.models.Character
 import com.raywenderlich.android.rickycharacters.data.models.CharactersResponseModel
 import com.raywenderlich.android.rickycharacters.data.network.ApiClient
 import com.raywenderlich.android.rickycharacters.data.network.ApiService
+import com.raywenderlich.android.rickycharacters.data.states.NetworkState
 import com.raywenderlich.android.rickycharacters.ui.adapters.CharactersAdapter
 import com.raywenderlich.android.rickycharacters.utils.hide
 import com.raywenderlich.android.rickycharacters.utils.show
 import kotlinx.android.synthetic.main.fragment_characters.*
+import java.io.IOException
 
 class StateCharactersFragment : Fragment(R.layout.fragment_characters) {
   private val apiService = ApiClient().getClient().create(ApiService::class.java)
@@ -57,20 +60,64 @@ class StateCharactersFragment : Fragment(R.layout.fragment_characters) {
 
     getCharacters()
     swipeContainer.setOnRefreshListener {
-      getCharacters()
+      lifecycleScope.launchWhenStarted {
+        getCharacters()
+      }
     }
   }
 
   private fun getCharacters() {
-    // TODO 8
+    lifecycleScope.launchWhenStarted {
+      hideEmptyView()
+      showRefreshDialog()
+      val characters = fetchCharacters()
+      handleCharactersResult(characters)
+    }
   }
 
-  // TODO 7
+  private suspend fun fetchCharacters(): NetworkState =
+    try {
+      val response = apiService.getCharacters()
+      if (response.isSuccessful) {
+        if (response.body() != null) {
+          NetworkState.Success(response.body()!!)
+        } else {
+          NetworkState.InvalidData
+        }
+      } else {
+        val errorMessage = response.message()
+        when (response.code()) {
+          403 -> NetworkState.HttpErrors.ResourceForbidden(errorMessage)
+          404 -> NetworkState.HttpErrors.ResourceNotFound(errorMessage)
+          500 -> NetworkState.HttpErrors.InternalServerError(errorMessage)
+          502 -> NetworkState.HttpErrors.BadGateWay(errorMessage)
+          301 -> NetworkState.HttpErrors.ResourceRemoved(errorMessage)
+          302 -> NetworkState.HttpErrors.RemovedResourceFound(errorMessage)
+          else -> NetworkState.Error(errorMessage)
+        }
+      }
+    } catch (error: IOException) {
+      NetworkState.NetworkException(error.message!!)
+  }
+
+  private fun handleCharactersResult(networkState: NetworkState) {
+    return when(networkState) {
+      is NetworkState.Success -> showCharacters(networkState.data)
+      is NetworkState.HttpErrors.ResourceForbidden -> handleError(networkState.exception)
+      is NetworkState.HttpErrors.ResourceNotFound -> handleError(networkState.exception)
+      is NetworkState.HttpErrors.InternalServerError -> handleError(networkState.exception)
+      is NetworkState.HttpErrors.BadGateWay -> handleError(networkState.exception)
+      is NetworkState.HttpErrors.ResourceRemoved -> handleError(networkState.exception)
+      is NetworkState.HttpErrors.RemovedResourceFound -> handleError(networkState.exception)
+      is NetworkState.InvalidData -> showEmptyView()
+      is NetworkState.Error -> handleError(networkState.error)
+      is NetworkState.NetworkException -> handleError(networkState.error)
+    }
+  }
 
   private fun displayCharacterDetails(character: Character){
     val characterFragmentAction =
-        StateCharactersFragmentDirections.actionStateCharactersFragmentToCharacterDetailsFragment(
-            character)
+        StateCharactersFragmentDirections.actionStateCharactersFragmentToCharacterDetailsFragment(character)
     findNavController().navigate(characterFragmentAction)
   }
 
