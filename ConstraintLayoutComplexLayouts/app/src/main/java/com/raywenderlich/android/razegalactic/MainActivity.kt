@@ -30,8 +30,14 @@
 
 package com.raywenderlich.android.razegalactic
 
+import android.animation.ValueAnimator
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
+import android.support.constraint.ConstraintSet
 import android.support.v7.app.AppCompatActivity
+import android.transition.TransitionManager
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -39,12 +45,46 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : AppCompatActivity() {
 
+  private val constraintSet1 = ConstraintSet()
+  private val constraintSet2 = ConstraintSet()
+
+  private var isOffscreen = true
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
+    constraintSet1.clone(constraintLayout)
+    constraintSet2.clone(this, R.layout.activity_main)
+
     switch1.setOnCheckedChangeListener { _, isChecked ->
       switch1.setText(if (isChecked) R.string.round_trip else R.string.one_way)
+    }
+
+    departButton.setOnClickListener { //3
+      /*TransitionManager.beginDelayedTransition(constraintLayout)
+      val constraint = if (!isOffscreen) constraintSet1 else constraintSet2
+      isOffscreen = !isOffscreen
+      constraint.applyTo(constraintLayout)*/
+
+      val layoutParams = rocketIcon.layoutParams as ConstraintLayout.LayoutParams
+      val startAngle = layoutParams.circleAngle
+      val endAngle = startAngle + (if (switch1.isChecked) 360 else 180)
+
+      val anim = ValueAnimator.ofFloat(startAngle, endAngle)
+      anim.addUpdateListener { valueAnimator ->
+        val animatedValue = valueAnimator.animatedValue as Float
+        val params = rocketIcon.layoutParams as ConstraintLayout.LayoutParams
+        params.circleAngle = animatedValue
+        rocketIcon.layoutParams = params
+        //rocketIcon.rotation = (animatedValue % 360 - startAngle)
+        rocketIcon.rotation = (animatedValue % 360)
+      }
+
+      anim.duration = if (switch1.isChecked) 2000 else 1000
+      anim.interpolator = LinearInterpolator()
+      anim.repeatCount = ValueAnimator.INFINITE
+      anim.start()
     }
   }
 }
