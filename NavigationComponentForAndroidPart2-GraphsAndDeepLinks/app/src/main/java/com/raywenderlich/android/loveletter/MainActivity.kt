@@ -32,9 +32,13 @@ package com.raywenderlich.android.loveletter
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import com.raywenderlich.android.loveletter.databinding.ActivityMainBinding
 import com.raywenderlich.android.loveletter.databinding.NavHeaderMainBinding
@@ -44,9 +48,10 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-  // TODO: initialize navController
-
-  // TODO: initialize appBarConfiguration
+  private val navController by lazy { findNavController(R.id.nav_host_fragment) }
+  private val appBarConfiguration by lazy {
+    AppBarConfiguration(setOf(R.id.sentFragment, R.id.inboxFragment), drawerLayout)
+  }
 
   private var lettersViewModel: LettersViewModel? = null
   private lateinit var headerBinding: NavHeaderMainBinding
@@ -81,12 +86,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   }
 
   private fun setupNavigation() {
-    // TODO: setup navController with drawerLayout
+    NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+    NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration)
 
-    // TODO: setup navController with toolbar and appBarConfiguration
-
-    // TODO: add destination listener to navController
-
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+      if (destination.id in arrayListOf(
+          R.id.createLetterFragment, R.id.presentLetter, R.id.editProfileFragment)
+      ) {
+        fab.hide()
+      } else {
+        if (destination.id == R.id.presentationFragment) {
+          toolbar.visibility = View.GONE
+        } else {
+          toolbar.visibility = View.VISIBLE
+        }
+      }
+    }
   }
 
   private fun setupViewModel() {
