@@ -36,6 +36,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.navGraphViewModels
 import com.raywenderlich.android.loveletter.R
 import com.raywenderlich.android.loveletter.databinding.FragmentEditProfileBinding
 import com.raywenderlich.android.loveletter.viewmodel.LettersViewModel
@@ -43,7 +44,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.*
 
 class EditProfileFragment : DialogFragment() {
 
-  private val lettersViewModel: LettersViewModel? = null
+  private val lettersViewModel: LettersViewModel by navGraphViewModels(R.id.nav_graph)
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
