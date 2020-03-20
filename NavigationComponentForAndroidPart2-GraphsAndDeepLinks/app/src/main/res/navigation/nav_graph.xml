@@ -37,5 +37,9 @@
         android:id="@+id/presentationFragment"
         android:name="com.raywenderlich.android.loveletter.fragment.PresentationFragment"
         android:label="fragment_presentation"
-        tools:layout="@layout/fragment_presentation" />
+        tools:layout="@layout/fragment_presentation" >
+        <argument
+            android:name="letter"
+            app:argType="string" />
+    </fragment>
 </navigation>

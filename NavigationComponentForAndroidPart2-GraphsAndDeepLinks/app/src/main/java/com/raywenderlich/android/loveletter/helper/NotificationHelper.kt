@@ -36,7 +36,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
+import android.os.Bundle
 import androidx.core.app.NotificationCompat
+import androidx.navigation.NavDeepLinkBuilder
 import com.google.gson.Gson
 import com.raywenderlich.android.loveletter.R
 import com.raywenderlich.android.loveletter.model.Letter
@@ -92,9 +94,14 @@ class NotificationHelper(val context: Context) {
       .build()
   }
 
+  // Builds a pending intent to navigate to specific fragment when notification banner is clicked
   private fun buildPendingIntentFromNavigation(letter: Letter): PendingIntent? {
-    // TODO: create pending intent with NavDeepLinkBuilder
-
-    return null
+    val bundle = Bundle()
+    bundle.putString(EXTRA_LETTER, gson.toJson(letter))
+    return NavDeepLinkBuilder(context)
+      .setGraph(R.navigation.nav_graph)
+      .setDestination(R.id.presentationFragment)
+      .setArguments(bundle)
+      .createPendingIntent()
   }
 }

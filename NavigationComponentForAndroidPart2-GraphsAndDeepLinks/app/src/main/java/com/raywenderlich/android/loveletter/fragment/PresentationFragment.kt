@@ -34,6 +34,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
+import com.google.gson.Gson
+import com.raywenderlich.android.loveletter.R
+import com.raywenderlich.android.loveletter.adapter.LetterPagerAdapter
+import com.raywenderlich.android.loveletter.extension.urlDecode
+import com.raywenderlich.android.loveletter.model.Letter
 import com.raywenderlich.android.loveletter.viewmodel.LettersViewModel
 import kotlinx.android.synthetic.main.fragment_presentation.*
 import kotlinx.android.synthetic.main.letter_page_description.view.*
@@ -42,16 +49,18 @@ import kotlinx.android.synthetic.main.letter_page_title.view.*
 
 class PresentationFragment : Fragment() {
 
-  private val lettersViewModel: LettersViewModel? = null
+  private val lettersViewModel: LettersViewModel by navGraphViewModels(R.id.nav_graph)
+  private val args: PresentationFragmentArgs by navArgs()
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    // TODO: get letter from args
+    val letter = Gson().fromJson(args.letter.urlDecode(), Letter::class.java)
+    lettersViewModel.saveLetterToInbox(letter)
 
-    // TODO: save letter to inbox with lettersViewModel
-
-    // TODO: assign letter to viewPager adapter
+    viewPager.adapter = context?.let {
+      LetterPagerAdapter(it, letter)
+    }
 
     viewPager.setPageTransformer(false) { page, position ->
       page.ivStar?.apply {

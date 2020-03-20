@@ -36,6 +36,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.raywenderlich.android.loveletter.R
 import com.raywenderlich.android.loveletter.databinding.FragmentCreateLetterBinding
 import com.raywenderlich.android.loveletter.extension.Event
@@ -44,7 +46,7 @@ import com.raywenderlich.android.loveletter.viewmodel.LettersViewModel
 
 class CreateLetterFragment : Fragment() {
 
-  private val lettersViewModel: LettersViewModel? = null
+  private val lettersViewModel: LettersViewModel? by navGraphViewModels(R.id.nav_graph)
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -84,13 +86,14 @@ class CreateLetterFragment : Fragment() {
   }
 
   private fun handleSend(toSend: () -> Unit) {
-    if (lettersViewModel != null && lettersViewModel.hasFullProfile()) {
+    if (lettersViewModel != null && lettersViewModel!!.hasFullProfile()) {
       toSend()
-      // TODO: navigate to sent fragment
-
+      // You can’t popBackStack directly to SentFragment because it might not be in the navigation stack
+      // The work around here is to go back to InboxFragment, which is the home fragment, first
+      findNavController().popBackStack(R.id.inboxFragment, false)
+      findNavController().navigate(R.id.sentFragment)
     } else {
-      // TODO: navigate to edit profile fragment
-
+      findNavController().navigate(R.id.editProfileFragment)
     }
     hideKeyboard()
   }
