@@ -28,20 +28,8 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-    <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-
-        <ImageView android:layout_width="wrap_content"
-                   android:layout_height="200dp"
-                   android:src="@mipmap/cat"
-                   android:id="@+id/animalImage"
-                   android:scaleType="centerCrop"
-
-        />
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+<resources>
+    <color name="colorPrimary">#006837</color>
+    <color name="colorPrimaryDark">#004012</color>
+    <color name="colorAccent">#c75f00</color>
+</resources>

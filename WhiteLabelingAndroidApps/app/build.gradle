@@ -33,16 +33,6 @@ android {
             applicationId = 'com.raywenderlich.android.catsPlanet'
         }
     }
-    sourceSets {
-        main {
-            java {
-                srcDirs 'src/main/java', 'src/animaldom/java'
-            }
-            res {
-                srcDirs 'src/main/res', 'src/animaldom/res'
-            }
-        }
-    }
 
     /*
 
