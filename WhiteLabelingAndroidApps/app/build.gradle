@@ -23,7 +23,73 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions 'version'
+    productFlavors {
+        animaldom {
+            dimension = 'version'
+        }
+        catsPlanet {
+            dimension = 'version'
+            applicationId = 'com.raywenderlich.android.catsPlanet'
+        }
+    }
+    sourceSets {
+        main {
+            java {
+                srcDirs 'src/main/java', 'src/animaldom/java'
+            }
+            res {
+                srcDirs 'src/main/res', 'src/animaldom/res'
+            }
+        }
+    }
 
+    /*
+
+    This sets up two different flavor dimensions: version and api. From the example above, you can
+    think of this as api for the differing API endpoints and version for animaldom versus catsPlanet
+    builds. You have two flavors for the version flavor dimension: animaldom and catsPlanet, then two
+    for the api dimension: development and production.
+
+    For Animaldom, you have:
+
+        animaldomDevelopmentDebug
+        animaldomDevelopmentRelease
+        animaldomProductionDebug
+        animaldomProductionRelease
+
+    For catsPlanet, you have:
+
+        catsPlanetDevelopmentDebug
+        catsPlanetDevelopmentRelease
+        catsPlanetProductionDebug
+        catsPlanetProductionRelease
+
+    flavorDimensions 'version', 'api'
+    productFlavors {
+
+      animaldom {
+        dimension 'version'
+      }
+
+      catsPlanet {
+        dimension 'version'
+        applicationId "com.raywenderlich.android.catsPlanet"
+      }
+
+      development {
+        dimension 'api'
+        // set up development environment url
+        // ...
+      }
+
+      production {
+        dimension 'api'
+        // set up production environment url
+        // ...
+      }
+    }
+    */
 }
 
 dependencies {

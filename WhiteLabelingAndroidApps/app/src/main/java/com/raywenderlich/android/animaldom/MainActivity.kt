@@ -42,9 +42,7 @@ class MainActivity : AppCompatActivity() {
     private val animals : ArrayList<Int> by lazy { Animals.getAnimals() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         setTheme(R.style.AppTheme)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setup()
@@ -52,7 +50,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setup() {
-
         recyclerAdapter = RecyclerAdapter(animals, this)
         gridLayoutManager = GridLayoutManager(this, 2)
 

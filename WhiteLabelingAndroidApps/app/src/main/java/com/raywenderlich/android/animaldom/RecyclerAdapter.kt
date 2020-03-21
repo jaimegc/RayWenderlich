@@ -29,8 +29,6 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.recyclerview_item.view.*
 
-
-
 class RecyclerAdapter(val items : ArrayList<Int>, val context: Context) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     var onClick: (view: View, position: Int) -> Unit = {_, _ -> }
@@ -43,13 +41,10 @@ class RecyclerAdapter(val items : ArrayList<Int>, val context: Context) : Recycl
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bindView(position, items[position], onClick)
-
     }
 
     inner class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-
         val animalImage = view.animalImage
-
 
         fun bindView(position: Int, resId: Int, onClick: (view: View, position: Int) -> Unit) {
             animalImage.setImageResource(resId)
