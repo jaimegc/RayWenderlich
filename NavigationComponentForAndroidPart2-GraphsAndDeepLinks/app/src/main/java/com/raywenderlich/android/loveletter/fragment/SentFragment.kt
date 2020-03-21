@@ -45,7 +45,7 @@ import com.raywenderlich.android.loveletter.model.Letter
 import com.raywenderlich.android.loveletter.viewmodel.LettersViewModel
 import kotlinx.android.synthetic.main.fragment_sent.*
 
-class SentFragment : Fragment() {
+class SentFragment : Fragment(R.layout.fragment_sent) {
 
   private val lettersViewModel: LettersViewModel by navGraphViewModels(R.id.nav_graph)
 
@@ -58,15 +58,15 @@ class SentFragment : Fragment() {
       findNavController().navigate(SentFragmentDirections.presentLetter(Gson().toJson(it)))
     }
     adapter.setItemDeleteListener {
-      lettersViewModel?.deleteLetter(it, FragmentType.SENT)
+      lettersViewModel.deleteLetter(it, FragmentType.SENT)
     }
     recyclerView.layoutManager = LinearLayoutManager(context)
     recyclerView.adapter = adapter
 
-    lettersViewModel?.sentLettersLiveData?.observe(activity!!, Observer { listItems: List<Letter> ->
+    lettersViewModel.sentLettersLiveData.observe(requireActivity(), Observer { listItems: List<Letter> ->
       adapter.update(listItems)
     })
-    lettersViewModel?.loadSentLetters()
+    lettersViewModel.loadSentLetters()
   }
 }
 

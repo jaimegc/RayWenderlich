@@ -45,7 +45,7 @@ import com.raywenderlich.android.loveletter.model.Letter
 import com.raywenderlich.android.loveletter.viewmodel.LettersViewModel
 import kotlinx.android.synthetic.main.fragment_inbox.*
 
-class InboxFragment : Fragment() {
+class InboxFragment : Fragment(R.layout.fragment_inbox) {
 
   private val lettersViewModel: LettersViewModel by navGraphViewModels(R.id.nav_graph)
 
@@ -58,15 +58,15 @@ class InboxFragment : Fragment() {
       findNavController().navigate(InboxFragmentDirections.presentLetter(Gson().toJson(it)))
     }
     adapter.setItemDeleteListener {
-      lettersViewModel?.deleteLetter(it, FragmentType.INBOX)
+      lettersViewModel.deleteLetter(it, FragmentType.INBOX)
     }
     recyclerView.layoutManager = LinearLayoutManager(context)
     recyclerView.adapter = adapter
 
-    lettersViewModel?.inboxLettersLiveData?.observe(this, Observer { listItems: List<Letter> ->
+    lettersViewModel.inboxLettersLiveData.observe(this, Observer { listItems: List<Letter> ->
       adapter.update(listItems)
     })
-    lettersViewModel?.loadInboxLetters()
+    lettersViewModel.loadInboxLetters()
   }
 }
 

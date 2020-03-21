@@ -68,7 +68,7 @@ class EditProfileFragment : DialogFragment() {
     }
 
     btnSave.setOnClickListener {
-      lettersViewModel?.saveProfile()
+      lettersViewModel.saveProfile()
       dismiss()
     }
 

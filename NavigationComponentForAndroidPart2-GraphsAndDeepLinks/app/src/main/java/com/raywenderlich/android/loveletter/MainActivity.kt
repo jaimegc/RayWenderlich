@@ -41,6 +41,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.navigateUp
 import com.google.android.material.navigation.NavigationView
 import com.raywenderlich.android.loveletter.databinding.ActivityMainBinding
 import com.raywenderlich.android.loveletter.databinding.NavHeaderMainBinding
@@ -133,6 +134,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fab.setOnClickListener {
         navController.navigate(R.id.createLetterFragment)
     }
+  }
+
+  override fun onSupportNavigateUp(): Boolean {
+    return navController.navigateUp(appBarConfiguration) ||  super.onSupportNavigateUp()
   }
 
   override fun onBackPressed() {

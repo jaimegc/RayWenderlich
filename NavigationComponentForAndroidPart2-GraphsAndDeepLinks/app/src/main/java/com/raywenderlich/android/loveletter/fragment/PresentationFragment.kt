@@ -47,7 +47,7 @@ import kotlinx.android.synthetic.main.letter_page_description.view.*
 import kotlinx.android.synthetic.main.letter_page_ps.view.*
 import kotlinx.android.synthetic.main.letter_page_title.view.*
 
-class PresentationFragment : Fragment() {
+class PresentationFragment : Fragment(R.layout.fragment_presentation) {
 
   private val lettersViewModel: LettersViewModel by navGraphViewModels(R.id.nav_graph)
   private val args: PresentationFragmentArgs by navArgs()
