@@ -32,14 +32,12 @@ package com.raywenderlich.android.gobuy.view
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.gobuy.R
+import com.raywenderlich.android.gobuy.databinding.GroceryListItemBinding
 import com.raywenderlich.android.gobuy.model.GroceryItem
-import kotlinx.android.synthetic.main.grocery_list_item.view.*
 
 class GroceryAdapter(val items: ArrayList<GroceryItem>, val context: Context,
                      val itemEditListener: (position: Int) -> Unit,
@@ -47,30 +45,25 @@ class GroceryAdapter(val items: ArrayList<GroceryItem>, val context: Context,
   // Gets the number of groceries in the list
   override fun getItemCount() = items.size
 
-  // TODO: return the binding instead of a view
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    var viewHolder = ViewHolder(LayoutInflater.from(context).inflate(R.layout.grocery_list_item, parent,
-        false))
-    return viewHolder
+    val layoutInflater = LayoutInflater.from(context)
+    val binding: GroceryListItemBinding = DataBindingUtil.inflate(layoutInflater,
+      R.layout.grocery_list_item, parent, false)
+    return ViewHolder(binding)
   }
 
-  // TODO: remove the text setters and replace them by the binding in the view holder
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val item = items[position]
-    val description = item.amount.toString() + "x: " + item.itemName
-    holder.textViewGroceryItem.text = description
-    holder.textViewPrice.text = item.finalPrice.toString()
-    holder.buttonEdit.setOnClickListener { itemEditListener(position) }
-    holder.buttonDelete.setOnClickListener { itemDeleteListener(position) }
+    holder.bind(item)
+    holder.binding.buttonEdit.setOnClickListener { itemEditListener(position) }
+    holder.binding.buttonDelete.setOnClickListener { itemDeleteListener(position) }
 
   }
 }
 
-// TODO: put a binding object as a parameter instead of a view
-class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-  val textViewGroceryItem: TextView = view.tv_grocery_item_name
-  val textViewPrice: TextView = view.tv_grocery_item_price
-  val buttonEdit: ImageButton = view.button_edit
-  val buttonDelete: ImageButton = view.button_delete
-
+class ViewHolder(val binding: GroceryListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+  fun bind(item: GroceryItem) {
+    binding.itemName = "${item.amount}x: ${item.itemName}"
+    binding.price = item.price.toString()
+  }
 }

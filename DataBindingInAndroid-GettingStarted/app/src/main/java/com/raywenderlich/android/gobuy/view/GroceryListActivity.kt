@@ -32,15 +32,14 @@ package com.raywenderlich.android.gobuy.view
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.raywenderlich.android.gobuy.R
+import com.raywenderlich.android.gobuy.databinding.ActivityGroceryListBinding
 import com.raywenderlich.android.gobuy.model.GroceryItem
 import com.raywenderlich.android.gobuy.viewmodel.GroceryListViewModel
 
@@ -50,34 +49,20 @@ import com.raywenderlich.android.gobuy.viewmodel.GroceryListViewModel
 class GroceryListActivity : AppCompatActivity(), NewItemDialogFragment.NewItemDialogListener {
 
   lateinit var viewModel: GroceryListViewModel
-  // TODO: remove the view items and change them for the binding object
-  private lateinit var addItemButton: Button
-  private lateinit var groceryListRecyclerView: RecyclerView
-  private lateinit var groceriesTotal: TextView
+  private lateinit var binding: ActivityGroceryListBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.AppTheme)
-
     super.onCreate(savedInstanceState)
-    // TODO: remove setContentView after data binding is added
-    setContentView(R.layout.activity_grocery_list)
-
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_grocery_list)
     viewModel = ViewModelProviders.of(this).get(GroceryListViewModel::class.java)
 
+    binding.rvGroceryList.layoutManager = LinearLayoutManager(this)
 
-    // TODO: initialize the binding object and remove the view invocations
-    addItemButton = findViewById(R.id.add_item_button)
-    groceryListRecyclerView = findViewById(R.id.rv_grocery_list)
-    groceriesTotal = findViewById(R.id.total_text_view)
-
-    // TODO: associate the layout manager, adapter and button listener with the binding object
-
-    groceryListRecyclerView.layoutManager = LinearLayoutManager(this)
-
-    groceryListRecyclerView.adapter = GroceryAdapter(viewModel.groceryListItems, this,
+    binding.rvGroceryList.adapter = GroceryAdapter(viewModel.groceryListItems, this,
         ::editGroceryItem, ::deleteGroceryItem)
 
-    addItemButton.setOnClickListener {
+    binding.addItemButton.setOnClickListener {
       addGroceryItem()
     }
 
@@ -98,9 +83,8 @@ class GroceryListActivity : AppCompatActivity(), NewItemDialogFragment.NewItemDi
   private fun deleteGroceryItem(position: Int) {
     Log.d("GoBuy", "delete")
     viewModel.removeItem(position)
-    groceriesTotal.text = viewModel.getTotal().toString()
-    // TODO: call the adapter from the binding object
-    groceryListRecyclerView.adapter?.notifyDataSetChanged()
+    binding.totalAmount = String.format("%.2f", viewModel.getTotal())
+    binding.rvGroceryList.adapter?.notifyDataSetChanged()
   }
 
   override fun onDialogPositiveClick(dialog: DialogFragment, item: GroceryItem, isEdit: Boolean,
@@ -109,18 +93,15 @@ class GroceryListActivity : AppCompatActivity(), NewItemDialogFragment.NewItemDi
       viewModel.groceryListItems.add(item)
     } else {
       viewModel.updateItem(position!!, item)
-      // TODO: call the adapter from the binding object
-      groceryListRecyclerView.adapter?.notifyDataSetChanged()
+      binding.rvGroceryList.adapter?.notifyDataSetChanged()
     }
 
-    // TODO: update the total amount and addItemButton with the binding
-    groceriesTotal.text = viewModel.getTotal().toString()
+    binding.totalAmount = String.format("%.2f", viewModel.getTotal())
 
-    Snackbar.make(addItemButton, "Item Added Successfully", Snackbar.LENGTH_LONG).setAction("Action", null).show()
+    Snackbar.make(binding.addItemButton, "Item Added Successfully", Snackbar.LENGTH_LONG).setAction("Action", null).show()
   }
 
   override fun onDialogNegativeClick(dialog: DialogFragment) {
-    // TODO: update the addItemButton with the binding
-    Snackbar.make(addItemButton, "Nothing Added", Snackbar.LENGTH_LONG).setAction("Action", null).show()
+    Snackbar.make(binding.addItemButton, "Nothing Added", Snackbar.LENGTH_LONG).setAction("Action", null).show()
   }
 }

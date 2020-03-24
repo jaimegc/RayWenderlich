@@ -25,7 +25,9 @@ android {
     }
   }
 
-  // TODO: Enable data binding here
+  dataBinding {
+    enabled true
+  }
 }
 
 dependencies {
