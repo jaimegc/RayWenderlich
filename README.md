@@ -13,3 +13,5 @@
 ## White Labeling Android Apps
 
 ## Data Binding In Android: Getting Started
+
+## View Binding Tutorial for Android: Getting Started
