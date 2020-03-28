@@ -36,16 +36,16 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.bmicalc.R
+import com.raywenderlich.android.bmicalc.databinding.ItemBinding
 import com.raywenderlich.android.bmicalc.model.BMIState
 import com.raywenderlich.android.bmicalc.model.Person
 import com.raywenderlich.android.bmicalc.model.WeightLog
 import com.raywenderlich.android.bmicalc.toFormattedString
-import kotlinx.android.synthetic.main.item.view.*
 
 class PersonAdapter(private val person: Person) : RecyclerView.Adapter<PersonAdapter.WeightViewHolder>() {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeightViewHolder {
-    val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
-    return WeightViewHolder(itemView)
+    val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    return WeightViewHolder(binding)
   }
 
   override fun getItemCount() = person.logs.size
@@ -54,12 +54,12 @@ class PersonAdapter(private val person: Person) : RecyclerView.Adapter<PersonAda
     holder.bind(person.logs.sortedWith(compareByDescending { it.date.time })[position])
   }
 
-  inner class WeightViewHolder(itemView: View) :
-      RecyclerView.ViewHolder(itemView) {
-    private val weightView = itemView.textView_weight
-    private val bmiTextView = itemView.textView_bmi
-    private val bmiView = itemView.view_bmi
-    private val dateView = itemView.textView_date
+  inner class WeightViewHolder(binding: ItemBinding) :
+      RecyclerView.ViewHolder(binding.root) {
+    private val weightView = binding.textViewWeight
+    private val bmiTextView = binding.textViewBmi
+    private val bmiView = binding.viewBmi
+    private val dateView = binding.textViewDate
 
     fun bind(weightLog: WeightLog) {
       weightView.text = weightView.context.getString(R.string.item_weight, weightLog.weight.toString())
