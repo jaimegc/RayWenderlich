@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="16dp"
+  tools:context=".DetailActivity">
+
+  <ToggleButton
+    android:id="@+id/toggleButtonMood"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_gravity="center"
+    android:background="@drawable/bg_selector_mood"
+    android:checked="true"
+    android:textOff=""
+    android:textOn="" />
+
+  <EditText
+    android:id="@+id/editTextLog"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:gravity="top"
+    android:hint="@string/detail_log_hint"
+    android:inputType="textCapSentences|textMultiLine"
+    android:textStyle="bold" />
+
+  <TextView
+    android:id="@+id/textViewDate"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:gravity="end"
+    app:layout_constraintEnd_toEndOf="@+id/textViewLog"
+    app:layout_constraintTop_toBottomOf="@+id/textViewLog"
+    tools:text="2019-7-14" />
+
+  <TextView
+    android:id="@+id/textViewLocation"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:gravity="end"
+    tools:text="Location: UNKNOWN" />
+
+</LinearLayout>
