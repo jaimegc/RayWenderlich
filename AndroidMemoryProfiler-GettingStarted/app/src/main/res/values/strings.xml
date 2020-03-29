@@ -1,0 +1,8 @@
+<resources>
+  <string name="app_name">Trip Log</string>
+  <string name="save_log">Save log</string>
+  <string name="detail_log_hint">What are you doing?</string>
+  <string name="location_unknown">Location: UNKNOWN</string>
+  <string name="location_known">Location: %1$s, %2$s</string>
+  <string name="delete_logs">Delete logs</string>
+</resources>
