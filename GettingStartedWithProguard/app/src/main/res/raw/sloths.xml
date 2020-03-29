@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sloths>
+  <sloth>
+    <name>Pygmy Three-Toed Sloth</name>
+    <realName>(Bradypus Pygmaeus)</realName>
+    <imageResource>pygmy</imageResource>
+    <description>The three-toed Pygmy Sloth is located in Isla Escudo de Veraguas, Panama and specifically lives in the Red Mangrove tree. Since it only exists in this small area that is currently being destroyed, the Pygmy Sloth is a critically endangered. Because they are small in size compared to other breeds, they are often perceived to to be very cute. However, they are stolen from their habitat for their fur, and Interpol has been tracking and trying to put a stop to illegal poachers that snatch them for the exotic pet trade. This breed is is very close to the breed of the Brown-Throated sloth, but their stomach and mouths are adapted to eat only Mangrove tree-leaves. The leaves themselves are tough and contain little nutrients. The Pygmy Sloth, like other three-toed sloths, can turn their heads almost 360 degrees. Even though sloths are small, some of the extinct sloth species were actually as large as elephants!</description>
+  </sloth>
+  <sloth>
+    <name>Maned Sloth</name>
+    <realName>(Bradypus Torquatus)</realName>
+    <imageResource>maned</imageResource>
+    <description>The three-toed Maned Sloth is unique looking from other species in that it has a dark circle around it’s neck. Their coat of fur is light brown. The mane is heavier in males than females, while the females are larger than the males. They move about 6-7 feet per minute on the ground, and roughly 10 feet per minute in trees. The Maned Sloth sleeps about ten hours a day, and can live up to about forty years. The frequent rain and humidity in the evergreen rain forests where they live allows a green hue of algae to grow – a symbiotic relationship that helps the sloth blend in with the leaves of trees. They will come down from the trees about once every week to pass digestive waste onto the ground. Because the habitat in South Eastern Brazil is being destroyed, the Maned Sloth is becoming vulnerable to extinction. In Brazil, if you are driving and see a sloth trying to cross the road, it's common to stop and move the sloth across the road.</description>
+  </sloth>
+  <sloth>
+    <name>Pale-Throated Sloth</name>
+    <realName>(Bradypus Tridactylus)</realName>
+    <imageResource>palethroated</imageResource>
+    <description>The three-toed Pale-Throated Sloth exists in the northern area of South America. They look very similar to the Brown-Throated Sloth, and they both live in the same area. However, the Pale-Throated sloth has a pale yellow patch on the fur of the throat. Their pink tongues are long, extending between ten to twelve inches out of their mouths, while their saliva is black. Their fur is also black, but they have a smaller head and ears compared to other breeds. Males can be identified by a striped patch on their back. Green algae grows on their fur which helps them hide from predators such as eagles, jaguars, anacondas, and sadly, humans. The mating call of a Pale-Throated Sloth sounds like a whistle. The female is larger and stronger than the males. Once pregnant, the female sloth takes six months to deliver. Other breeds stay pregnant between seven and ten months. Their baby is born with a full set of fur.</description>
+  </sloth>
+  <sloth>
+    <name>Brown-Throated Sloth</name>
+    <realName>(Bradypus Variegatus)</realName>
+    <imageResource>brownthroated</imageResource>
+    <description>The three-toed Brown-Throated Sloth are located throughout South and Central America, often sharing areas with the Hoffmann Sloth. Their enamel teeth are situated mostly at the front and are pin shaped. While some of their habitat is being wiped out, they are currently not in danger of extinction. The Brown-Throated Sloths do not have appendixes, or gall bladders, and the size of females and males are about the same. They are considered to be more quick and sharp than other breeds. Being diurnal, they are quite active throughout the daytime. Their fur consists of brown or beige colors, with darker patches around the eyes, cheeks and forehead. The fur around the throat is usually the most brown, hence their name. The Brown-Throated Sloth is considered more territorial than other breeds; the males using their claws to ward off other nearby males.</description>
+  </sloth>
+  <sloth>
+    <name>Linnaeus’s Two-Toed Sloth</name>
+    <realName>(Choloepus Didactylus)</realName>
+    <imageResource>linnaeus</imageResource>
+    <description>The two-toed Linne's Sloth lives only in the tropical rain forest. While these sloths are actually excellent swimmers, they hide themselves at the very tops of trees to protect themselves from being hunted. Female sloths often hang around in groups and are more abundant in the population than males (approximately 11:1). When the sloth gives birth, the baby sloth will cling to the mother for about a month. It takes about three years for a sloth to be ready to reproduce. This breed has either eight or ten teeth in total; made up of dentin that has the ability to grow back. The Linne population is doing well. They are far from being endangered.</description>
+  </sloth>
+  <sloth>
+    <name>Hoffman’s Two-Toed Sloth</name>
+    <realName>(Choloepus Hoffmanni)</realName>
+    <imageResource>hoffman</imageResource>
+    <description>Like other breeds, the two-toed Hoffmann’s sloth survives off of eating tree leaves, along with the occasional fruit or flower. These sloths' teeth are made from dentin that grow back, making it very easy to chew branches and leaves excessively. Their stomach consists of three sections. The first two consist of digestive bacteria and the third completes the digestion process, producing waste. Just as we perceive sloths as slow, the digestive cycle of a Hoffman is very slow – up to one month to digest a single meal. This means that about 66% of their mass is from accumulated tree leaves. While their population is quite large (with a higher ratio of females to males), the recent destruction of their habitat in Central and South America is beginning to change that. Interpol is actively trying to put a stop to the illegal pet trade of the Hoffmann.</description>
+  </sloth>
+</sloths>
