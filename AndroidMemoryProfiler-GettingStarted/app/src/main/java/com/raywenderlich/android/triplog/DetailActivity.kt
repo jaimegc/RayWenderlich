@@ -63,6 +63,7 @@ class DetailActivity : BaseActivity() {
     textViewLocation.text = coordinatesFormatter.format(null)
 
     editTextLog.isEnabled = true
+    toggleButtonMood.isEnabled = true
   }
 
   private fun showLog(log: TripLog) {
@@ -71,6 +72,9 @@ class DetailActivity : BaseActivity() {
     textViewLocation.text = coordinatesFormatter.format(log.coordinates)
 
     editTextLog.isEnabled = false
+    toggleButtonMood.isChecked = log.happyMood
+    toggleButtonMood.isEnabled = false
+
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -89,7 +93,7 @@ class DetailActivity : BaseActivity() {
   }
 
   private fun newLog() {
-    val log = TripLog(editTextLog.text.toString(), Date(), null)
+    val log = TripLog(editTextLog.text.toString(), Date(), null, toggleButtonMood.isChecked)
 
     val intent = Intent()
     intent.putExtra(EXTRA_NEW_LOG, log)

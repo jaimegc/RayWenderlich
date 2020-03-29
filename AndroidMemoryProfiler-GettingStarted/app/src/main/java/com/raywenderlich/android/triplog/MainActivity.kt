@@ -44,7 +44,7 @@ import java.util.*
 
 private const val NEW_LOG_REQUEST = 249
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), TripLogAdapter.Listener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.AppTheme)
@@ -104,11 +104,16 @@ class MainActivity : BaseActivity() {
   }
 
   private fun refreshLogs() {
-    layoutContainer.removeAllViews()
+    val adapter = TripLogAdapter(this, repository.getLogs(),
+      dateFormatter, coordinatesFormatter)
+    adapter.listener = this
+    recyclerView.adapter = adapter
+
+    /*layoutContainer.removeAllViews()
     repository.getLogs().forEach { tripLog ->
       val child = inflateLogViewItem(tripLog)
       layoutContainer.addView(child)
-    }
+    }*/
   }
 
   private fun inflateLogViewItem(tripLog: TripLog): View? {
@@ -122,7 +127,7 @@ class MainActivity : BaseActivity() {
     }
   }
 
-  private fun showDetailLog(tripLog: TripLog) {
+  override fun showDetailLog(tripLog: TripLog) {
     val intent = Intent(this@MainActivity, DetailActivity::class.java).apply {
       putExtra(EXTRA_VIEW_LOG, tripLog)
     }
