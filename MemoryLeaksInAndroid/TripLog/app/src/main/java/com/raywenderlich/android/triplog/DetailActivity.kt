@@ -80,7 +80,9 @@ class DetailActivity : BaseActivity() {
       priority = LocationRequest.PRIORITY_HIGH_ACCURACY
       interval = 5000
     }
-    locationCallback = object : LocationCallback() {
+
+    // Fix memory leaks from Google Play Services
+    locationCallback = WeakLocationCallback(object : LocationCallback() {
       override fun onLocationResult(locationResult: LocationResult?) {
         if (locationResult == null) {
           return
@@ -89,7 +91,7 @@ class DetailActivity : BaseActivity() {
         currentCoordinates = Coordinates(location.latitude, location.longitude)
         textViewLocation.text = coordinatesFormatter.format(currentCoordinates)
       }
-    }
+    })
   }
 
   override fun onResume() {
@@ -173,5 +175,11 @@ class DetailActivity : BaseActivity() {
     setResult(Activity.RESULT_OK, intent)
 
     ActivityCompat.finishAfterTransition(this)
+  }
+
+    // Fix memory leaks
+  override fun onPause() {
+    fusedLocationClient.removeLocationUpdates(locationCallback)
+    super.onPause()
   }
 }

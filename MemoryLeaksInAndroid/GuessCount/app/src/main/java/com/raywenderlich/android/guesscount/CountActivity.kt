@@ -111,4 +111,10 @@ class CountActivity : AppCompatActivity() {
     buttonGuess.visibility = View.VISIBLE
     progressBar.visibility = View.VISIBLE
   }
+
+  // Fix memory leaks
+  override fun onDestroy() {
+    super.onDestroy()
+    stopCounting()
+  }
 }
