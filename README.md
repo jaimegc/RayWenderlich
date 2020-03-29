@@ -35,3 +35,7 @@ https://www.raywenderlich.com/6430697-view-binding-tutorial-for-android-getting-
 ## Memory Leaks In Android
 
 https://www.raywenderlich.com/4690472-memory-leaks-in-android
+
+## Android Memory Profiler: Getting Started
+
+https://www.raywenderlich.com/4557771-android-memory-profiler-getting-started
