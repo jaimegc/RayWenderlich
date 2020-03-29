@@ -39,3 +39,7 @@ https://www.raywenderlich.com/4690472-memory-leaks-in-android
 ## Android Memory Profiler: Getting Started
 
 https://www.raywenderlich.com/4557771-android-memory-profiler-getting-started
+
+## Getting Started with Proguard
+
+https://www.raywenderlich.com/7449-getting-started-with-proguard
