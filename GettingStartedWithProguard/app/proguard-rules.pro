@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn org.slf4j.**
+-dontwarn sun.misc.**
+
+-keep class org.jbox2d.** { *; }
+
+-dontwarn javax.xml.stream.**
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+-keep class * implements org.simpleframework.xml.core.Parameter { public *; }

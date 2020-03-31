@@ -17,12 +17,10 @@
     android:textColor="@color/colorAccent"
     android:textSize="18sp" />
 
-  <TextView
-    android:id="@+id/descriptionTextView"
-    android:layout_width="match_parent"
-    android:layout_height="461dp"
-    android:layout_marginTop="20dp"
-    android:layout_marginStart="5dp"
-    android:text="@string/sloth_content" />
+  <com.igalata.bubblepicker.rendering.BubblePicker
+      android:id="@+id/picker"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:backgroundColor="@android:color/white" />
 
 </LinearLayout>
