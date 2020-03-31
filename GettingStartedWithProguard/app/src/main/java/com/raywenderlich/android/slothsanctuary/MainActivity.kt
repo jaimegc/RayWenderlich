@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity() {
     setContentView(R.layout.activity_main)
 
     setupBubblePicker()
+    val bn = BN() //BubbleNumbers
+    bn.sn() //bubbleNumbers.setupNumbers
   }
 
   override fun onResume() {
@@ -75,9 +77,13 @@ class MainActivity : AppCompatActivity() {
       val colors = resources.obtainTypedArray(R.array.colors)
       val titles = map.toList()
 
-      val multiplier = 2
-      val modulus = 8
-      val addition = 1
+      //val multiplier = 2
+      //val modulus = 8
+      //val addition = 1
+
+      val multiplier = GO.f1 //GradientObject.field1
+      val modulus = GO.f2 //GradientObject.field2
+      val addition = GO.f3 //GradientObject.field3
 
       override val totalCount = titles.size
 

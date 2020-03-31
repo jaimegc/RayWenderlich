@@ -31,10 +31,17 @@
 package com.raywenderlich.android.slothsanctuary
 
 import android.support.annotation.Keep
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.memberProperties
 
 class BN { //BubbleNumbers
   fun sn() { //setupNumbers
 
+    /**
+     *  The real magic happens when the app invokes sn() (setupNumbers), which looks for the
+     *  com.raywenderlich.android.slothsanctuary.GO class. It finds the fields named f1–f3 and swaps
+     *  the values out for something else at runtime.
+     */
     //setValue
     sv("com.raywenderlich.android.slothsanctuary.GO", "f1", 2)
     sv("com.raywenderlich.android.slothsanctuary.GO", "f2", 8)
@@ -42,6 +49,9 @@ class BN { //BubbleNumbers
   }
 }
 
+// Adding @Keep on a class will preserve the entire class. Adding @Keep on a method or field will
+// keep the name of the method or field as-is
+@Keep
 object GO { //GradientObject
   var f1 = 3 //field1
   var f2 = 6 //field2
@@ -49,6 +59,14 @@ object GO { //GradientObject
 }
 
 fun sv(ownerClassName: String, fieldName: String, value: Any) { //setValue - uses reflection
-
+  // Gets the Kotlin class for the ownerClassName string provided.
+  val kClass = Class.forName(ownerClassName).kotlin
+  // Instantiates that class at runtime if not already instantiated.
+  val instance = kClass.objectInstance ?: kClass.java.newInstance()
+  // Dynamically gets the property referred to by fieldName
+  val member = kClass.memberProperties.filterIsInstance<KMutableProperty<*>>()
+          .firstOrNull { it.name == fieldName }
+  // Calls a setter on that property, passing in value
+  member?.setter?.call(instance, value)
 }
 

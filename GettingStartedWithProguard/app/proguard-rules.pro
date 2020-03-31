@@ -29,3 +29,17 @@
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
 -keep class * implements org.simpleframework.xml.core.Parameter { public *; }
+
+-keepclassmembers class * { @org.simpleframework.xml.* *; }
+
+# That being said, obfuscation is sometimes used to hide or obscure proprietary logic or a secret algorithm.
+# Sometimes developers apply manual obfuscation. Some examples are string splitting, dummy code, disguising
+# the names of methods, or using reflection to muddy the app flow. You’ll add some reflection code that obfuscates
+# your secret bubble-gradient formula. As of right now, it’s not impossible for an attacker to find the numbers
+# used to make the gradient.
+# When Android Studio compiles your app, it puts the code into that classes.dex DEX (Dalvik Executable) file.
+# DEX files contain Bytecode – an intermediary set of instructions that a Java Virtual Machine (JVM) runs or ART
+# (The Android Runtime) later converts to native code. With this being exposed, an attacker could potentially see
+# values that your variables hold!
+-keep class kotlin.reflect.jvm.internal.** { *; }
+-keep class kotlin.Metadata { *; }
