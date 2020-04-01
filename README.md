@@ -43,3 +43,7 @@ https://www.raywenderlich.com/4557771-android-memory-profiler-getting-started
 ## Getting Started with Proguard
 
 https://www.raywenderlich.com/7449-getting-started-with-proguard
+
+## Securing Network Data Tutorial
+
+https://www.raywenderlich.com/5634-securing-network-data-tutorial-for-android
