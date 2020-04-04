@@ -58,7 +58,7 @@ class PetRequester(listeningActivity: Activity) {
 
   fun retrievePets() {
     val connection =
-        URL("http://collinstuart.github.io/posts.json").openConnection() as HttpURLConnection
+        URL("https://collinstuart.github.io/posts.json").openConnection() as HttpsURLConnection
 
     doAsync {
       val json = connection.inputStream.bufferedReader().readText()
