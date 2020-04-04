@@ -34,6 +34,7 @@ import android.app.Activity
 import android.content.Context
 import android.util.Base64
 import android.util.Log
+import com.datatheorem.android.trustkit.TrustKit
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import org.jetbrains.anko.doAsync
@@ -57,8 +58,10 @@ class PetRequester(listeningActivity: Activity) {
   }
 
   fun retrievePets() {
-    val connection =
-        URL("https://collinstuart.github.io/posts.json").openConnection() as HttpsURLConnection
+    val url = URL("https://collinstuart.github.io/posts.json")
+    val connection = url.openConnection() as HttpsURLConnection
+
+    connection.sslSocketFactory = TrustKit.getInstance().getSSLSocketFactory(url.host)
 
     doAsync {
       val json = connection.inputStream.bufferedReader().readText()

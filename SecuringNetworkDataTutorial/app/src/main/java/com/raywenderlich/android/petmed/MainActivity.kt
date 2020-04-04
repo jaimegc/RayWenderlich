@@ -33,6 +33,7 @@ package com.raywenderlich.android.petmed
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import com.datatheorem.android.trustkit.TrustKit
 import java.io.IOException
 import java.util.ArrayList
 import kotlinx.android.synthetic.main.activity_main.recyclerView
@@ -56,6 +57,7 @@ class MainActivity : AppCompatActivity(), PetRequester.RequestManagerResponse {
     recyclerView.adapter = adapter
 
     petRequester = PetRequester(this)
+    TrustKit.initializeWithNetworkSecurityConfiguration(this)
   }
 
   override fun onStart() {
