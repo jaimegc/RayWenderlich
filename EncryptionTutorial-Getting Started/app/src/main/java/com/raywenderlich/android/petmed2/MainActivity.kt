@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
 
   private fun lastLoggedIn(): String? {
     //Retrieve shared prefs data
-    val preferences = getSharedPreferences("MyPrefs", Context.MODE_WORLD_WRITEABLE)
+    val preferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
     return preferences.getString("l", "")
   }
 
@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
     val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
 
     //Save to shared prefs
-    val editor = getSharedPreferences("MyPrefs", Context.MODE_WORLD_READABLE).edit()
+    val editor = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit()
     editor.putString("l", currentDateTimeString)
     editor.apply()
   }

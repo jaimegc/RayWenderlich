@@ -52,7 +52,43 @@ internal class Encryption {
 
     val map = HashMap<String, ByteArray>()
 
-    //TODO: Add code here
+    // Here, you use the SecureRandom class, which makes sure that the output is difficult to predict.
+    // That’s called a cryptographically strong random number generator.
+    val random = SecureRandom()
+    val salt = ByteArray(256)
+    random.nextBytes(salt)
+
+    // Put the salt and password into PBEKeySpec, a password-based encryption object. The constructor
+    // takes an iteration count (1324). The higher the number, the longer it would take to operate on
+    // a set of keys during a brute force attack.
+    val pbKeySpec = PBEKeySpec(password, salt, 1324, 256)
+    // Passed PBEKeySpec into the SecretKeyFactory
+    val secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+    val keyBytes = secretKeyFactory.generateSecret(pbKeySpec).encoded
+    val keySpec = SecretKeySpec(keyBytes, "AES")
+
+    val ivRandom = SecureRandom() //not caching previous seeded instance of SecureRandom
+    // Created 16 bytes of random data.
+    val iv = ByteArray(16)
+    ivRandom.nextBytes(iv)
+    // Packaged it into an IvParameterSpec object.
+    val ivSpec = IvParameterSpec(iv)
+
+    // You passed in the specification string “AES/CBC/PKCS7Padding”. It chooses AES with cipher block
+    // chaining mode. PKCS7Padding is a well-known standard for padding. Since you’re working with blocks,
+    // not all data will fit perfectly into the block size, so you need to pad the remaining space. By
+    // the way, blocks are 128 bits long and AES adds padding before encryption.
+    val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+    cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec)
+    val encrypted = cipher.doFinal(dataToEncrypt)
+
+    // You packaged the encrypted data into a HashMap. You also added the salt and initialization vector
+    // to the map. That’s because all those pieces are necessary to decrypt the data.
+    // It’s OK to store salts and IVs, but reusing or sequentially incrementing them weakens the security.
+    // But you should never store the key !!!
+    map["salt"] = salt
+    map["iv"] = iv
+    map["encrypted"] = encrypted
 
     return map
   }
