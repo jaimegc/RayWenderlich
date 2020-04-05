@@ -47,3 +47,7 @@ https://www.raywenderlich.com/7449-getting-started-with-proguard
 ## Securing Network Data Tutorial
 
 https://www.raywenderlich.com/5634-securing-network-data-tutorial-for-android
+
+## Encryption Tutorial For Android: Getting Started
+
+https://www.raywenderlich.com/778533-encryption-tutorial-for-android-getting-started
