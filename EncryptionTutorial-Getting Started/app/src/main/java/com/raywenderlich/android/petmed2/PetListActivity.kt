@@ -64,7 +64,7 @@ class PetListActivity : AppCompatActivity() {
     val file = File(filesDir.absolutePath + File.separator +
         MainActivity.FileConstants.DATA_SOURCE_FILE_NAME)
     val password = intent.getCharArrayExtra(PWD_KEY)
-    petList.addAll( viewModel.getPets(file, password))
+    petList.addAll(viewModel.getPets(file, password))
     adapter.notifyDataSetChanged()
   }
 
