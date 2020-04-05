@@ -33,6 +33,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Base64
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
@@ -113,18 +114,75 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun lastLoggedIn(): String? {
-    //Retrieve shared prefs data
+    //Get password
+    val password = CharArray(login_password.length())
+    login_password.text.getChars(0, login_password.length(), password, 0)
+
+    // Retrieve shared prefs data
     val preferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-    return preferences.getString("l", "")
+    val base64Encrypted = preferences.getString("l", "")
+    val base64Salt = preferences.getString("lsalt", "")
+    val base64Iv = preferences.getString("liv", "")
+
+    // Base64 decode
+    val encrypted = Base64.decode(base64Encrypted, Base64.NO_WRAP)
+    val iv = Base64.decode(base64Iv, Base64.NO_WRAP)
+    val salt = Base64.decode(base64Salt, Base64.NO_WRAP)
+
+    // Decrypt
+    val decrypted = Encryption().decrypt(
+      hashMapOf("iv" to iv, "salt" to salt, "encrypted" to encrypted), password)
+
+    var lastLoggedIn: String? = null
+    decrypted?.let {
+        lastLoggedIn = String(it, Charsets.UTF_8)
+    }
+
+    return lastLoggedIn
+    /**
+     *  Old method with shared preferences
+     */
+    /*val preferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+    return preferences.getString("l", "") */
   }
 
   private fun saveLastLoggedInTime() {
+    //Get password
+    val password = CharArray(login_password.length())
+    login_password.text.getChars(0, login_password.length(), password, 0)
+
+    // Base64 the data
     val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
+    // Converted the String into a ByteArray with the UTF-8 encoding and encrypted it. In the previous
+    // code you opened a file as binary, but in the case of working with strings, you’ll need to take
+    // the character encoding into account
+    val map =
+      Encryption().encrypt(currentDateTimeString.toByteArray(Charsets.UTF_8), password)
+    // Converted the raw data into a String representation. SharedPreferences can’t store a ByteArray
+    // directly but it can work with String. Base64 is a standard that converts raw data to a string representation
+    val valueBase64String = Base64.encodeToString(map["encrypted"], Base64.NO_WRAP)
+    val saltBase64String = Base64.encodeToString(map["salt"], Base64.NO_WRAP)
+    val ivBase64String = Base64.encodeToString(map["iv"], Base64.NO_WRAP)
+
+    //Save to shared prefs
+    val editor = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit()
+    // Saved the strings to the SharedPreferences. You can optionally encrypt both the preference key
+    // and the value. That way, an attacker can’t figure out what the value might be by looking at the
+    // key, and using keys like “password” won’t work for brute forcing, since that would be encrypted as well
+    editor.putString("l", valueBase64String)
+    editor.putString("lsalt", saltBase64String)
+    editor.putString("liv", ivBase64String)
+    editor.apply()
+
+    /**
+     *  Old method with shared preferences
+     */
+    /*val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
 
     //Save to shared prefs
     val editor = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE).edit()
     editor.putString("l", currentDateTimeString)
-    editor.apply()
+    editor.apply() */
   }
 
   private fun createDataSource(filename: String, outFile: File) {
