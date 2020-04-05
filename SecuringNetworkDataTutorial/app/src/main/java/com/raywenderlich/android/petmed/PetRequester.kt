@@ -49,6 +49,10 @@ class PetRequester(listeningActivity: Activity) {
     fun receivedNewPets(results: PetResults)
   }
 
+  companion object {
+      private const val SERVER_PUBLIC_KEY = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEP9M/My4tmNiaZRcQtYj58EjGN8N3uSnW/s7FpTh4Q+T3tNVkwVCjmDN+a2qIRTcedQyde0d8CoG3Lp2ZlnPhcw=="
+  }
+
   private val responseListener: RequestManagerResponse
   private val context: Context
 
@@ -58,18 +62,46 @@ class PetRequester(listeningActivity: Activity) {
   }
 
   fun retrievePets() {
-    val url = URL("https://collinstuart.github.io/posts.json")
+    val urlString = "https://collinstuart.github.io/posts.json"
+    val url = URL(urlString)
     val connection = url.openConnection() as HttpsURLConnection
-
     connection.sslSocketFactory = TrustKit.getInstance().getSSLSocketFactory(url.host)
+
+    val authenticator = Authenticator()
 
     doAsync {
       val json = connection.inputStream.bufferedReader().readText()
       connection.disconnect()
 
       uiThread {
-        val receivedPets = Gson().fromJson(json, PetResults::class.java)
-        responseListener.receivedNewPets(receivedPets)
+        // Old way
+        //val receivedPets = Gson().fromJson(json, PetResults::class.java)
+        //responseListener.receivedNewPets(receivedPets)
+
+        // Verify received signature
+        val jsonElement = JsonParser().parse(json)
+        val jsonObject = jsonElement.asJsonObject
+        val result = jsonObject.get("items").toString()
+        val resultBytes = result.toByteArray(Charsets.UTF_8)
+
+        val signature = jsonObject.get("signature").toString()
+        val signatureBytes = Base64.decode(signature, Base64.DEFAULT)
+
+        val success = authenticator.verify(signatureBytes, resultBytes, SERVER_PUBLIC_KEY)
+
+        val bytesToSign = urlString.toByteArray(Charsets.UTF_8)
+        val signedData = authenticator.sign(bytesToSign)
+        val requestSignature = Base64.encodeToString(signedData, Base64.DEFAULT)
+        Log.d("PetRequester", "signature for request : $requestSignature")
+
+        val signingSuccess = authenticator.verify(signedData, bytesToSign)
+        Log.d("PetRequester", "success : $signingSuccess")
+
+        if (success) {
+          // Process data
+          val receivedPets = Gson().fromJson(json, PetResults::class.java)
+          responseListener.receivedNewPets(receivedPets)
+        }
       }
     }
   }
