@@ -124,7 +124,22 @@ internal class Encryption {
 
     val map = HashMap<String, ByteArray>()
 
-    //TODO: Add code here
+    // This time, you retrieve the key from the KeyStore
+    val keyStore = KeyStore.getInstance("AndroidKeyStore")
+    keyStore.load(null)
+
+    val secretKeyEntry =
+      keyStore.getEntry("MyKeyAlias", null) as KeyStore.SecretKeyEntry
+    val secretKey = secretKeyEntry.secretKey
+
+    // You encrypted the data using the Cipher object, given the SecretKey.
+    val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+    val ivBytes = cipher.iv
+    val encryptedBytes = cipher.doFinal(dataToEncrypt)
+
+    map["iv"] = ivBytes
+    map["encrypted"] = encryptedBytes
 
     return map
   }
@@ -133,7 +148,20 @@ internal class Encryption {
 
     var decrypted: ByteArray? = null
 
-    //TODO: Add code here
+    val keyStore = KeyStore.getInstance("AndroidKeyStore")
+    keyStore.load(null)
+
+    val secretKeyEntry =
+      keyStore.getEntry("MyKeyAlias", null) as KeyStore.SecretKeyEntry
+    val secretKey = secretKeyEntry.secretKey
+
+    val encryptedBytes = map["encrypted"]
+    val ivBytes = map["iv"]
+
+    val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+    val spec = GCMParameterSpec(128, ivBytes)
+    cipher.init(Cipher.DECRYPT_MODE, secretKey, spec)
+    decrypted = cipher.doFinal(encryptedBytes)
 
     return decrypted
   }
@@ -141,8 +169,37 @@ internal class Encryption {
   @TargetApi(23)
   fun keystoreTest() {
 
-    //TODO: Add code here
+    // You created a KeyGenerator instance and set it to the “AndroidKeyStore” provider.
+    val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+    val keyGenParameterSpec = KeyGenParameterSpec.Builder("MyKeyAlias",
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+            // Requires lock screen, invalidated if lock screen is disabled
+            //.setUserAuthenticationRequired(true)
+            // you can pass -1 to require fingerprint authentication every time you want access to the key.
+            // Only available x seconds from password authentication. -1 requires finger print - every time
+            //.setUserAuthenticationValidityDurationSeconds(120)
+            // This tells the KeyStore to use a new
+            // IV each time. As you learned earlier, that means that if you encrypt identical data a
+            // second time, the encrypted output will not be identical. It prevents attackers from
+            // obtaining clues about the encrypted data based on feeding in the same inputs.
+            //.setRandomizedEncryptionRequired(true)
+            // You can use .setUserAuthenticationValidWhileOnBody(boolean remainsValid). This makes
+            // the key unavailable once the device has detected it is no longer on the person
+            //.setUserAuthenticationValidWhileOnBody()
+            .setRandomizedEncryptionRequired(true)
+            .build()
+    keyGenerator.init(keyGenParameterSpec)
+    keyGenerator.generateKey()
 
+    // TEST
+    val map = keystoreEncrypt("My very sensitive string!".toByteArray(Charsets.UTF_8))
+    val decryptedBytes = keystoreDecrypt(map)
+    decryptedBytes?.let {
+      val decryptedString = String(it, Charsets.UTF_8)
+      Log.e("MyApp", "The decrypted string is: $decryptedString")
+    }
   }
 }
 

@@ -58,7 +58,8 @@ class MainActivity : AppCompatActivity() {
     workingFile = File(filesDir.absolutePath + java.io.File.separator +
         FileConstants.DATA_SOURCE_FILE_NAME)
 
-    //Encryption().keystoreTest()
+    // TEST
+    Encryption().keystoreTest()
 
     updateLoggedInState()
   }
