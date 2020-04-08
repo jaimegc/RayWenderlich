@@ -32,6 +32,7 @@
 package com.raywenderlich.android.rwdc2018.ui.photos
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
@@ -56,7 +57,7 @@ class PhotosFragment : Fragment() {
   override fun onAttach(context: Context?) {
     super.onAttach(context)
 
-    val viewModelFactory = Injection.provideViewModelFactory()
+    val viewModelFactory = Injection.provideViewModelFactory(lifecycle)
     viewModel = ViewModelProviders.of(this, viewModelFactory).get(PhotosViewModel::class.java)
   }
 

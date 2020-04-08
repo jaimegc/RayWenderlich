@@ -31,10 +31,12 @@
 
 package com.raywenderlich.android.rwdc2018.repository
 
+import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LiveData
 
 
 interface Repository {
   fun getPhotos(): LiveData<List<String>>
   fun getBanner(): LiveData<String>
+  fun registerLifecycle(lifecycle: Lifecycle)
 }

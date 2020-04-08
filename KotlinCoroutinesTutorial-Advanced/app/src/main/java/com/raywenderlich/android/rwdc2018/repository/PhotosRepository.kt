@@ -31,50 +31,66 @@
 
 package com.raywenderlich.android.rwdc2018.repository
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.*
+import android.util.Log
 import com.raywenderlich.android.rwdc2018.app.PhotosUtils
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 
-class PhotosRepository : Repository {
+class PhotosRepository : Repository, CoroutineScope, LifecycleObserver {
   private val photosLiveData = MutableLiveData<List<String>>()
   private val bannerLiveData = MutableLiveData<String>()
+  private val job: Job = Job()
+  override val coroutineContext: CoroutineContext
+    get() = Dispatchers.Main + job
 
   override fun getPhotos(): LiveData<List<String>> {
-    fetchPhotos()
+    launch { fetchPhotos() }
     return photosLiveData
   }
 
   override fun getBanner(): LiveData<String> {
-    fetchBanner()
+    launch { fetchBanner() }
     return bannerLiveData
   }
 
-  private fun fetchBanner() {
-    val runnable = Runnable {
-      val photosString = PhotosUtils.photoJsonString()
-      val banner = PhotosUtils.bannerFromJsonString(photosString ?: "")
-
-      if (banner != null) {
-        bannerLiveData.postValue(banner)
-      }
-    }
-
-    val thread = Thread(runnable)
-    thread.start()
+  override fun registerLifecycle(lifecycle: Lifecycle) {
+    lifecycle.addObserver(this)
   }
 
-  private fun fetchPhotos() {
-    val runnable = Runnable {
+  private suspend fun fetchBanner() {
+    val banner = withContext(Dispatchers.IO) {
+      // Dispatchers.IO
       val photosString = PhotosUtils.photoJsonString()
-      val photos = PhotosUtils.photoUrlsFromJsonString(photosString ?: "")
-
-      if (photos != null) {
-        photosLiveData.postValue(photos)
-      }
+      // Dispatchers.IO
+      PhotosUtils.bannerFromJsonString(photosString ?: "")
     }
+    // Dispatchers.Main
+    if (banner != null) {
+      // Dispatchers.Main
+      bannerLiveData.value = banner
+    }
+  }
 
-    val thread = Thread(runnable)
-    thread.start()
+  private suspend fun fetchPhotos() {
+    val photos = withContext(Dispatchers.IO) {
+      // Dispatchers.IO
+      val photosString = PhotosUtils.photoJsonString()
+      // Dispatchers.IO
+      PhotosUtils.photoUrlsFromJsonString(photosString ?: "")
+    }
+    // Dispatchers.Main
+    if (photos != null) {
+      // Dispatchers.Main
+      photosLiveData.value = photos
+    }
+  }
+
+  @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+  private fun cancelJob() {
+    if (job.isActive) {
+      job.cancel()
+    }
   }
 }
