@@ -43,10 +43,7 @@ import android.view.View
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.raywenderlich.android.photouploader.workers.CompressWorker
-import com.raywenderlich.android.photouploader.workers.FilterWorker
-import com.raywenderlich.android.photouploader.workers.KEY_IMAGE_INDEX
-import com.raywenderlich.android.photouploader.workers.KEY_IMAGE_URI
+import com.raywenderlich.android.photouploader.workers.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -130,9 +127,15 @@ class MainActivity : AppCompatActivity() {
     if (data != null && resultCode == Activity.RESULT_OK && requestCode == GALLERY_REQUEST_CODE) {
       val applySepiaFilter = buildSepiaFilterRequests(data)
       val zipFiles = OneTimeWorkRequest.Builder(CompressWorker::class.java).build()
+      val uploadZip = OneTimeWorkRequest.Builder(UploadWorker::class.java).build()
+      val cleanFiles = OneTimeWorkRequest.Builder(CleanFilesWorker::class.java).build()
 
       val workManager = WorkManager.getInstance()
-      workManager.beginWith(applySepiaFilter).then(zipFiles).enqueue()
+      workManager.beginWith(cleanFiles)
+        .then(applySepiaFilter)
+        .then(zipFiles)
+        .then(uploadZip)
+        .enqueue()
     }
   }
 
