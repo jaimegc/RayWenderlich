@@ -34,11 +34,18 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import com.raywenderlich.android.photouploader.workers.FilterWorker
+import com.raywenderlich.android.photouploader.workers.KEY_IMAGE_INDEX
+import com.raywenderlich.android.photouploader.workers.KEY_IMAGE_URI
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -120,6 +127,44 @@ class MainActivity : AppCompatActivity() {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (data != null && resultCode == Activity.RESULT_OK && requestCode == GALLERY_REQUEST_CODE) {
+      val applySepiaFilter = buildSepiaFilterRequests(data)
+
+      val workManager = WorkManager.getInstance()
+      workManager.beginWith(applySepiaFilter).enqueue()
     }
+  }
+
+  private fun buildSepiaFilterRequests(intent: Intent): List<OneTimeWorkRequest> {
+    val filterRequests = mutableListOf<OneTimeWorkRequest>()
+
+    intent.clipData?.run {
+      for (i in 0 until itemCount) {
+        val imageUri = getItemAt(i).uri
+
+        val filterRequest = OneTimeWorkRequest.Builder(FilterWorker::class.java)
+                .setInputData(buildInputDataForFilter(imageUri, i))
+                .build()
+        filterRequests.add(filterRequest)
+      }
+    }
+
+    intent.data?.run {
+      val filterWorkRequest = OneTimeWorkRequest.Builder(FilterWorker::class.java)
+              .setInputData(buildInputDataForFilter(this, 0))
+              .build()
+
+      filterRequests.add(filterWorkRequest)
+    }
+
+    return filterRequests
+  }
+
+  private fun buildInputDataForFilter(imageUri: Uri?, index: Int): Data {
+    val builder = Data.Builder()
+    if (imageUri != null) {
+      builder.putString(KEY_IMAGE_URI, imageUri.toString())
+      builder.putInt(KEY_IMAGE_INDEX, index)
+    }
+    return builder.build()
   }
 }
