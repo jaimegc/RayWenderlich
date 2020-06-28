@@ -140,6 +140,7 @@ class MainActivity : AppCompatActivity() {
       val cleanFiles = OneTimeWorkRequest.Builder(CleanFilesWorker::class.java).build()
 
       val workManager = WorkManager.getInstance()
+
       workManager.beginWith(cleanFiles)
         .then(applySepiaFilter)
         .then(zipFiles)
