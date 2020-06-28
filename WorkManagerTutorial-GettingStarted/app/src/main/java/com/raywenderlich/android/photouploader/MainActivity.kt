@@ -32,6 +32,7 @@ package com.raywenderlich.android.photouploader
 
 import android.Manifest
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
@@ -40,9 +41,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+import androidx.work.*
 import com.raywenderlich.android.photouploader.workers.*
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -61,6 +60,8 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
+
+    private const val WORK_TAG = "WORK_TAG"
   }
 
   private var permissionRequestCount = 0
@@ -71,12 +72,17 @@ class MainActivity : AppCompatActivity() {
     initUi()
 
     requestPermissionsIfNecessary()
+    observeWork()
   }
 
   private fun initUi() {
     uploadGroup.visibility = View.GONE
 
     pickPhotosButton.setOnClickListener { showPhotoPicker() }
+
+    cancelButton.setOnClickListener {
+      WorkManager.getInstance().cancelUniqueWork(WORK_TAG)
+    }
   }
 
   private fun showPhotoPicker() {
@@ -127,7 +133,10 @@ class MainActivity : AppCompatActivity() {
     if (data != null && resultCode == Activity.RESULT_OK && requestCode == GALLERY_REQUEST_CODE) {
       val applySepiaFilter = buildSepiaFilterRequests(data)
       val zipFiles = OneTimeWorkRequest.Builder(CompressWorker::class.java).build()
-      val uploadZip = OneTimeWorkRequest.Builder(UploadWorker::class.java).build()
+      val uploadZip = OneTimeWorkRequest.Builder(UploadWorker::class.java)
+            .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
+            .addTag(WORK_TAG) // After you’ve added a tag to the worker, you can observe its status
+            .build()
       val cleanFiles = OneTimeWorkRequest.Builder(CleanFilesWorker::class.java).build()
 
       val workManager = WorkManager.getInstance()
@@ -137,6 +146,19 @@ class MainActivity : AppCompatActivity() {
         .then(uploadZip)
         .enqueue()
     }
+  }
+
+  private fun observeWork() {
+    val statuses = WorkManager.getInstance().getWorkInfosByTagLiveData(WORK_TAG)
+    statuses.observe(this,
+            Observer<List<WorkInfo>> { workStatusList ->
+              val currentWorkStatus = workStatusList?.getOrNull(0)
+              val isWorkActive = currentWorkStatus?.state?.isFinished == false
+
+              val uploadVisibility = if (isWorkActive) View.VISIBLE else View.GONE
+
+              uploadGroup.visibility = uploadVisibility
+            })
   }
 
   private fun buildSepiaFilterRequests(intent: Intent): List<OneTimeWorkRequest> {
