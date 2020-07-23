@@ -44,7 +44,8 @@ interface RecipeApi {
   // 2 - Create a keystore.properties file with the following content (including the quotes):
   //     FOOD2FORK_API_KEY="YOUR API KEY"
 
-  @GET("search?key=" + BuildConfig.FOOD2FORK_API_KEY)
+  //@GET("search?key=" + BuildConfig.FOOD2FORK_API_KEY)
+  @GET("search?key=invent")
   fun search(@Query("q") query: String): Call<RecipesContainer>
 
   companion object Factory {

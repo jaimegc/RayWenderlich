@@ -38,7 +38,7 @@ class SearchResultsPresenter(private val repository: RecipeRepository) :
   fun search(query: String) {
     view?.showLoading()
 
-    repository.getRecipes(query, object : RecipeRepository.RepositoryCallback<List<Recipe>> {
+    repository.getRecipes(query, object : RepositoryCallback<List<Recipe>> {
       override fun onSuccess(recipes: List<Recipe>?) {
         this@SearchResultsPresenter.recipes = recipes
         if (recipes != null && recipes.isNotEmpty()) {

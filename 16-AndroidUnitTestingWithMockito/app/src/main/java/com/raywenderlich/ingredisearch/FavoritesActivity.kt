@@ -40,7 +40,7 @@ import kotlinx.android.synthetic.main.view_noresults.*
 
 class FavoritesActivity : ChildActivity() {
 
-  private val repository: RecipeRepository by lazy {RecipeRepository.getRepository(this)}
+  private val repositoryImpl: RecipeRepositoryImpl by lazy {RecipeRepositoryImpl.getRepository(this)}
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -52,7 +52,7 @@ class FavoritesActivity : ChildActivity() {
     noresultsContainer.visibility = View.GONE
     noresultsTitle.text = getString(R.string.nofavorites)
 
-    val favoriteRecipes = repository.getFavoriteRecipes()
+    val favoriteRecipes = repositoryImpl.getFavoriteRecipes()
     if (favoriteRecipes.isEmpty()) {
       showEmptyRecipes()
     } else {
@@ -81,12 +81,12 @@ class FavoritesActivity : ChildActivity() {
 
       override fun onAddFavorite(item: Recipe) {
         item.isFavorited = true
-        repository.addFavorite(item)
+        repositoryImpl.addFavorite(item)
         list.adapter.notifyItemChanged(recipes.indexOf(item))
       }
 
       override fun onRemoveFavorite(item: Recipe) {
-        repository.removeFavorite(item)
+        repositoryImpl.removeFavorite(item)
         (list.adapter as RecipeAdapter).removeItem(item)
         list.adapter.notifyItemRemoved(recipes.indexOf(item))
         if (list.adapter.itemCount == 0) {

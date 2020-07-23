@@ -40,16 +40,28 @@ import retrofit2.Response
 
 private const val FAVORITES_KEY = "FAVORITES_KEY"
 
-class RecipeRepository(private val sharedPreferences: SharedPreferences) {
+interface RecipeRepository {
+  fun addFavorite(item: Recipe)
+  fun removeFavorite(item: Recipe)
+  fun getFavoriteRecipes(): List<Recipe>
+  fun getRecipes(query: String, callback: RepositoryCallback<List<Recipe>>)
+}
+
+interface RepositoryCallback<in T> {
+  fun onSuccess(t: T?)
+  fun onError()
+}
+
+class RecipeRepositoryImpl(private val sharedPreferences: SharedPreferences) : RecipeRepository {
 
   private val gson = Gson()
 
-  fun addFavorite(item: Recipe) {
+  override fun addFavorite(item: Recipe) {
     val favorites = getFavoriteRecipes() + item
     saveFavorites(favorites)
   }
 
-  fun removeFavorite(item: Recipe) {
+  override fun removeFavorite(item: Recipe) {
     val favorites = getFavoriteRecipes() - item
     saveFavorites(favorites)
   }
@@ -62,7 +74,7 @@ class RecipeRepository(private val sharedPreferences: SharedPreferences) {
 
   private inline fun <reified T> Gson.fromJson(json: String): T = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
-  fun getFavoriteRecipes(): List<Recipe> {
+  override fun getFavoriteRecipes(): List<Recipe> {
     val favoritesString = sharedPreferences.getString(FAVORITES_KEY, null)
     if (favoritesString != null) {
       return gson.fromJson(favoritesString)
@@ -71,7 +83,7 @@ class RecipeRepository(private val sharedPreferences: SharedPreferences) {
     return emptyList()
   }
 
-  fun getRecipes(query: String, callback: RepositoryCallback<List<Recipe>>) {
+  override fun getRecipes(query: String, callback: RepositoryCallback<List<Recipe>>) {
     val call = RecipeApi.create().search(query)
     call.enqueue(object : Callback<RecipesContainer> {
       override fun onResponse(call: Call<RecipesContainer>?, response: Response<RecipesContainer>?) {
@@ -101,14 +113,9 @@ class RecipeRepository(private val sharedPreferences: SharedPreferences) {
     }
   }
 
-  interface RepositoryCallback<in T> {
-    fun onSuccess(t: T?)
-    fun onError()
-  }
-
   companion object {
-    fun getRepository(context: Context): RecipeRepository {
-      return RecipeRepository(context.getSharedPreferences("Favorites", Context.MODE_PRIVATE))
+    fun getRepository(context: Context): RecipeRepositoryImpl {
+      return RecipeRepositoryImpl(context.getSharedPreferences("Favorites", Context.MODE_PRIVATE))
     }
   }
 }

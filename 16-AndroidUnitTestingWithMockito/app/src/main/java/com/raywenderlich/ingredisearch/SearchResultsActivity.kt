@@ -50,7 +50,7 @@ private const val EXTRA_QUERY = "EXTRA_QUERY"
 
 class SearchResultsActivity : ChildActivity(), SearchResultsPresenter.View {
 
-  private val presenter: SearchResultsPresenter by lazy {SearchResultsPresenter(RecipeRepository.getRepository(this))}
+  private val presenter: SearchResultsPresenter by lazy {SearchResultsPresenter(RecipeRepositoryImpl.getRepository(this))}
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
