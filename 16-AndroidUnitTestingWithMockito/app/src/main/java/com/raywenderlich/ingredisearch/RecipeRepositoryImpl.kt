@@ -52,7 +52,7 @@ interface RepositoryCallback<in T> {
   fun onError()
 }
 
-class RecipeRepositoryImpl(private val sharedPreferences: SharedPreferences) : RecipeRepository {
+open class RecipeRepositoryImpl(private val sharedPreferences: SharedPreferences) : RecipeRepository {
 
   private val gson = Gson()
 
