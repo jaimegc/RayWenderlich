@@ -33,6 +33,10 @@ dependencies {
   implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
 
   // TUTORIAL DEPENDENCIES HERE
+  androidTestImplementation 'androidx.test:rules:1.1.1'
+  androidTestImplementation 'androidx.test.ext:truth:1.1.0'
+  androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+
 
   // Testing Dependencies
   testImplementation 'junit:junit:4.12'
