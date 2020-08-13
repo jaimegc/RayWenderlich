@@ -84,3 +84,7 @@ https://www.raywenderlich.com/7109-test-driven-development-tutorial-for-android-
 
 https://www.raywenderlich.com/240-android-accessibility-tutorial-getting-started
 
+## 22) Common Design Patterns for Android with Kotlin
+
+https://www.raywenderlich.com/470-common-design-patterns-for-android-with-kotlin
+
