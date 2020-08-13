@@ -75,3 +75,7 @@ https://www.raywenderlich.com/1505688-ui-testing-with-kakao-tutorial-for-android
 ## 19) Testing REST APIs Using MockWebServer
 
 https://www.raywenderlich.com/10091980-testing-rest-apis-using-mockwebserver
+
+## 20) Android Accessibility Tutorial: Getting Started
+
+https://www.raywenderlich.com/240-android-accessibility-tutorial-getting-started
