@@ -43,6 +43,8 @@ android {
     versionCode 1
     versionName "1.0"
 
+    //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "com.raywenderlich.android.ingredisearch.IngredisearchTestRunner"
     vectorDrawables.useSupportLibrary = true
   }
   buildTypes {
@@ -63,6 +65,14 @@ dependencies {
   implementation 'com.squareup.retrofit2:retrofit:2.5.0'
   implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
   implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
+
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+  androidTestImplementation 'androidx.test:runner:1.1.1'
+  androidTestImplementation 'androidx.test:rules:1.1.1'
+  androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.1'
+  // To perform actions, such as scrolling to an item on a RecyclerView
+  androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.1'
+  androidTestImplementation 'com.agoda.kakao:kakao:2.0.0'
 
   implementation 'com.github.bumptech.glide:glide:4.8.0'
   annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
