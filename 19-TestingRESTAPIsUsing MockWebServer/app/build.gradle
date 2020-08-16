@@ -14,8 +14,7 @@ android {
     versionCode 1
     versionName "1.0"
 
-    // TODO : replace with custom runner
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "com.raywenderlich.android.potterverse.MockTestRunner"
   }
 
   buildTypes {
@@ -53,9 +52,8 @@ dependencies {
   implementation "androidx.recyclerview:recyclerview:1.1.0"
   implementation "com.squareup.okhttp3:okhttp:4.4.0"
 
-  // TODO : place mockwebserver dependency here
-
-  // TODO : place okhttp3-idling-resource dependency here
+  androidTestImplementation "com.squareup.okhttp3:mockwebserver:4.6.0"
+  androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
 
   androidTestImplementation 'androidx.test:rules:1.2.0'
   androidTestImplementation 'androidx.test:runner:1.2.0'

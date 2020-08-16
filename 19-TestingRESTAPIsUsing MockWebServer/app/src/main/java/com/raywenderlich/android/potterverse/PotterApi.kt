@@ -46,4 +46,4 @@ interface PotterApi {
 
 // TODO : paste below your API key as a String value. You can get it from https://www.potterapi.com/
 //  (do not forget to escape $ characters with a backslash if needed)
-val API_KEY = ""
+val API_KEY = "\$2a$10\$Qy1rDBo52vc4Vee9tNkbd.ck/DQNvAnpm6uWtKCc5KDad7yIVj8Te"
