@@ -42,6 +42,10 @@ import org.junit.Test
 
 class VictoryViewModelTest {
 
+
+  // For testing purposes, you need an InstantTaskExecutorRule to avoid the check of setting values
+  // to LiveData objects on threads that are not the Android main thread. The @JvmField annotation
+  // is used to expose the rule as a field. This is required by the Android JUnit test runner
   @Rule
   @JvmField
   var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -55,6 +59,31 @@ class VictoryViewModelTest {
     viewModel.viewState.observeForever(viewStateObserver)
     viewModel.repository = mockVictoryRepository
   }
+
+  @Test
+  fun incrementVictoryCountCallsRepository() {
+    stubVictoryRepositoryGetVictoryCount(5) // Arrange
+    viewModel.incrementVictoryCount() // Act
+    verify(mockVictoryRepository).getVictoryCount() // Assert
+  }
+
+  @Test
+  fun incrementVictoryCountUpdatesCount() {
+    val previousCount = 5
+    stubVictoryRepositoryGetVictoryCount(previousCount)
+    viewModel.incrementVictoryCount()
+    verify(mockVictoryRepository).setVictoryCount(previousCount + 1)
+  }
+
+  @Test
+  fun incrementVictoryCountReturnsUpdatedCount() {
+    val previousCount = 5
+    stubVictoryRepositoryGetVictoryCount(previousCount)
+    viewModel.incrementVictoryCount()
+    verify(viewStateObserver)
+        .onChanged(VictoryUiModel.CountUpdated(previousCount + 1))
+  }
+
 
   @Test
   fun setVictoryTitleSavesTitle() {
