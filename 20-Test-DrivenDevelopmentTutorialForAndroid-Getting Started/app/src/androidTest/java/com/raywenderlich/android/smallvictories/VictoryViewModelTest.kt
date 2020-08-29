@@ -107,6 +107,16 @@ class VictoryViewModelTest {
   }
 
   @Test
+  fun resetCallsRepository() {
+    val title = "New title"
+    val count = 5
+    stubVictoryRepositoryGetVictoryTitleAndCount(Pair(title, count))
+
+    viewModel.reset()
+    verify(mockVictoryRepository).clear()
+  }
+
+  @Test
   fun setVictoryTitleSavesTitle() {
     val title = "New title"
     viewModel.setVictoryTitle(title)

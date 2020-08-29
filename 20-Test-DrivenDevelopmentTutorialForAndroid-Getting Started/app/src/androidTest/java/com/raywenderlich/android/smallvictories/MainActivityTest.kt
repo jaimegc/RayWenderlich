@@ -94,6 +94,43 @@ class MainActivityTest {
   }
 
   @Test
+  fun resetButtonUpdateCountToZero() {
+    onView(withId(R.id.fab))
+            .perform(click(), doubleClick())
+            .perform(click(), doubleClick())
+            .perform(click(), doubleClick())
+            .perform(click(), doubleClick())
+            .perform(click(), doubleClick())
+
+    onView(withId(R.id.action_reset))
+            .perform(click())
+
+    onView(allOf(withId(R.id.textVictoryCount), withText("0")))
+            .check(matches(isDisplayed()))
+  }
+
+  @Test
+  fun resetButtonUpdateTitleToDefaultText() {
+    val newTitle = "Made the bed"
+    val defaultTitle = "Victory title"
+
+    onView(withId(R.id.textVictoryTitle))
+            .perform(click())
+    onView(instanceOf(EditText::class.java))
+            .perform(clearText())
+            .perform(typeText(newTitle))
+
+    onView(withText(R.string.dialog_ok))
+            .perform(click())
+
+    onView(withId(R.id.action_reset))
+            .perform(click())
+
+    onView(allOf(withId(R.id.textVictoryTitle), withText(defaultTitle)))
+            .check(matches(isDisplayed()))
+  }
+
+  @Test
   fun tappingOnTitleOpensEditDialog() {
     onView(withId(R.id.textVictoryTitle))
         .perform(click())
@@ -119,7 +156,7 @@ class MainActivityTest {
     onView(withText(R.string.dialog_ok))
         .perform(click())
 
-    onView(allOf(withId(R.id.textVictoryTitle), withText("newTitle")))
+    onView(allOf(withId(R.id.textVictoryTitle), withText(newTitle)))
         .check(matches(isDisplayed()))
   }
 }
