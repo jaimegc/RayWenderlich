@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
     addCoffee.setOnClickListener {
       coffeeRepo.increment()
       showCount()
+      amountConsumed.announceForAccessibility(getString(R.string.count_updated, consumedString()))
     }
   }
 
