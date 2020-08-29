@@ -33,12 +33,14 @@ package com.raywenderlich.android.smallvictories
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.*
+import android.support.test.espresso.assertion.ViewAssertions.doesNotExist
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.LargeTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.widget.EditText
+import android.widget.TextView
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.instanceOf
 import org.junit.Rule
@@ -53,6 +55,45 @@ class MainActivityTest {
   var rule = ActivityTestRule(MainActivity::class.java)
 
   @Test
+  fun incrementingVictoryCountUpdatesCountView() {
+    // Instead of using findViewById, you could directly use the name of the view, thanks to the
+    // Kotlin Android Extensions. So, in this example, you could use:
+    // val previousCountString = rule.activity.textVictoryCount.text.toString()
+    val previousCountString = rule.activity
+            .findViewById<TextView>(R.id.textVictoryCount).text.toString()
+    val previousCount =
+            if (previousCountString.isBlank()) {
+              0
+            } else {
+              previousCountString.toInt()
+            }
+
+    onView(withId(R.id.fab))
+        .perform(click())
+
+    onView(allOf(withId(R.id.textVictoryCount),
+      withText((previousCount + 1).toString())))
+        .check(matches(isDisplayed()))
+  }
+
+  @Test
+  fun editingTitleDoesntChangeCount() {
+    onView(withId(R.id.fab))
+            .perform(click())
+    onView(withId(R.id.textVictoryTitle))
+            .perform(click())
+    val newTitle = "Made the bed"
+    onView(instanceOf(EditText::class.java))
+            .perform(clearText())
+            .perform(typeText(newTitle))
+    onView(withText(R.string.dialog_ok))
+            .perform(click())
+
+    onView(allOf(withId(R.id.textVictoryCount), withText("0")))
+            .check(doesNotExist())
+  }
+
+  @Test
   fun tappingOnTitleOpensEditDialog() {
     onView(withId(R.id.textVictoryTitle))
         .perform(click())
@@ -63,6 +104,7 @@ class MainActivityTest {
     onView(withId(android.R.id.button2))
         .perform(click())
   }
+
 
   @Test
   fun editingDialogUpdatesTitle() {
@@ -77,7 +119,7 @@ class MainActivityTest {
     onView(withText(R.string.dialog_ok))
         .perform(click())
 
-    onView(allOf(withId(R.id.textVictoryTitle), withText(newTitle)))
+    onView(allOf(withId(R.id.textVictoryTitle), withText("newTitle")))
         .check(matches(isDisplayed()))
   }
 }
