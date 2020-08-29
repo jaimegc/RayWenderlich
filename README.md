@@ -88,3 +88,10 @@ https://www.raywenderlich.com/240-android-accessibility-tutorial-getting-started
 
 https://www.raywenderlich.com/470-common-design-patterns-for-android-with-kotlin
 
+## 23) Continuous Integration for Android
+
+https://www.raywenderlich.com/10562143-continuous-integration-for-android
+
+## 24) MVI Architecture for Android Tutorial: Getting Started
+
+https://www.raywenderlich.com/817602-mvi-architecture-for-android-tutorial-getting-started
