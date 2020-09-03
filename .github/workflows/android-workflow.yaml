@@ -14,9 +14,7 @@ jobs:
           java-version: 1.8
       - name: Print contents in current directory
         run: ls -la
-      - name: Change folder
-        run: cd 22-ContinuousIntegrationforAndroid/
-      - name: Print contents in current directory
-        run: ls -la
       - name: Unit tests
-        run: ./gradlew testDebugUnitTest
+        run: |
+          cd 22-ContinuousIntegrationforAndroid/
+          ./gradlew testDebugUnitTest
