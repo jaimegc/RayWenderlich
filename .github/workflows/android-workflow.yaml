@@ -15,5 +15,4 @@ jobs:
       - name: Print contents in current directory
         run: ls -la
       - name: Unit tests
-        run: cd 22-ContinuousIntegrationforAndroid/
         run: ./gradlew testDebugUnitTest
