@@ -1,13 +1,25 @@
 name: CI Workflow
-on: [push]
+
+on: [push, pull_request]
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
 
 jobs:
   build-and-test:
     name: Build and run tests
     runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [21, 23, 29]
+        target: [default, google_apis]
     steps:
-      - name: Checkout current repository in macos's file system 
+      - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Run unit tests
         run: cd 22-ContinuousIntegrationforAndroid/ && ./gradlew testDebugUnitTest
@@ -15,10 +27,17 @@ jobs:
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
           arch: x86
           profile: Nexus 6
           avd-name: test
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: cd 22-ContinuousIntegrationforAndroid/ && ./gradlew connectedCheck
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v1
+        with:
+          name: reports
+          path: 22-ContinuousIntegrationforAndroid/app/build/reports
