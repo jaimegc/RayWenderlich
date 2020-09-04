@@ -24,8 +24,7 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Run unit tests
-        #run: cd 22-ContinuousIntegrationforAndroid/ && ./gradlew testDebugUnitTest
-        run: ./gradlew ${{ matrix.module }}:testDebugUnitTest --stacktrace
+        run: cd ${{ matrix.module }}/ && ./gradlew testDebugUnitTest --stacktrace
 
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -38,8 +37,7 @@ jobs:
           avd-name: test
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          #script: cd 22-ContinuousIntegrationforAndroid/ && ./gradlew connectedCheck
-          script: ./gradlew ${{ matrix.module }}:connectedCheck --stacktrace
+          script: cd 22-ContinuousIntegrationforAndroid/ && ./gradlew connectedCheck
 
       - name: Upload Reports
         uses: actions/upload-artifact@v1
