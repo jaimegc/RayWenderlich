@@ -12,8 +12,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [21, 23, 29]
-        target: [default, google_apis]
+        #api-level: [22, 23, 29]
+        #target: [default, google_apis]
+        module:
+          - 22-ContinuousIntegrationforAndroid
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -22,19 +24,22 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Run unit tests
-        run: cd 22-ContinuousIntegrationforAndroid/ && ./gradlew testDebugUnitTest
+        #run: cd 22-ContinuousIntegrationforAndroid/ && ./gradlew testDebugUnitTest
+        script: ./gradlew ${{ matrix.module }}:testDebugUnitTest --stacktrace
 
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.target }}
+          #api-level: ${{ matrix.api-level }}
+          #target: ${{ matrix.target }}
+          api-level: 29
           arch: x86
           profile: Nexus 6
           avd-name: test
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: cd 22-ContinuousIntegrationforAndroid/ && ./gradlew connectedCheck
+          #script: cd 22-ContinuousIntegrationforAndroid/ && ./gradlew connectedCheck
+          script: ./gradlew ${{ matrix.module }}:connectedCheck --stacktrace
 
       - name: Upload Reports
         uses: actions/upload-artifact@v1
