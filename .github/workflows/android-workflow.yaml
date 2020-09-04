@@ -25,7 +25,7 @@ jobs:
 
       - name: Run unit tests
         #run: cd 22-ContinuousIntegrationforAndroid/ && ./gradlew testDebugUnitTest
-        script: ./gradlew ${{ matrix.module }}:testDebugUnitTest --stacktrace
+        run: ./gradlew ${{ matrix.module }}:testDebugUnitTest --stacktrace
 
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
