@@ -41,5 +41,5 @@ jobs:
       - name: Upload Reports
         uses: actions/upload-artifact@v1
         with:
-          name: reports
+          name: ${{ matrix.module }} - reports
           path: ${{ matrix.module }}/app/build/reports
