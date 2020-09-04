@@ -68,5 +68,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v1
         with:
-          name: ${{ matrix.module }} - Tests reports
+          name: ${{ matrix.module }} - apk-debug
           path: ${{ matrix.module }}/app/build/reports
