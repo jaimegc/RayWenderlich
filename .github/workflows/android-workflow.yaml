@@ -14,9 +14,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Run unit tests
-        run: |
-          cd 22-ContinuousIntegrationforAndroid/
-          ./gradlew testDebugUnitTest
+        run: cd 22-ContinuousIntegrationforAndroid/ && ./testDebugUnitTest
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -26,6 +24,4 @@ jobs:
           avd-name: test
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          run: |
-            cd 22-ContinuousIntegrationforAndroid/
-            ./gradlew connectedCheck
+          script: cd 22-ContinuousIntegrationforAndroid/ && ./connectedCheck
