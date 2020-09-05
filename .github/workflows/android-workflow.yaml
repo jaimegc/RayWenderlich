@@ -3,11 +3,11 @@ on:
   push:
     branches:
       - master
-      - dev
+      #- dev
   pull_request:
     branches:
       - master
-      - dev
+      #- dev
 
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
