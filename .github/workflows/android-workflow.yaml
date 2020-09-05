@@ -14,6 +14,11 @@ jobs:
         #api-level: [22, 23, 29]
         #target: [default, google_apis]
         module:
+          - 16-AndroidUnitTestingWithMockito
+          - 17-EspressoTestingAndScreenRobots-GettingStarted
+          - 18-UITestingWithKakao-GettingStarted
+          - 19-TestingRESTAPIsUsingMockWebServer
+          - 20-Test-DrivenDevelopmentTutorialForAndroid-GettingStarted
           - 22-ContinuousIntegrationforAndroid
     steps:
       - name: Checkout
@@ -43,19 +48,6 @@ jobs:
         with:
           name: ${{ matrix.module }} - Tests reports
           path: ${{ matrix.module }}/app/build/reports
-      
-      - name: Run jacoco tests coverage
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          #api-level: ${{ matrix.api-level }}
-          #target: ${{ matrix.target }}
-          api-level: 29
-          arch: x86
-          profile: Nexus 6
-          avd-name: test
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          script: cd ${{ matrix.module }}/ && ./gradlew jacocoTestReport --stacktrace
         
   generate-apk:
     name: Generate apk
