@@ -55,6 +55,11 @@ jobs:
     strategy:
       matrix:
         module:
+          - 16-AndroidUnitTestingWithMockito
+          - 17-EspressoTestingAndScreenRobots-GettingStarted
+          - 18-UITestingWithKakao-GettingStarted
+          - 19-TestingRESTAPIsUsingMockWebServer
+          - 20-Test-DrivenDevelopmentTutorialForAndroid-GettingStarted
           - 22-ContinuousIntegrationforAndroid
     needs:
       - test
