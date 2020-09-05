@@ -36,14 +36,27 @@ jobs:
           avd-name: test
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: cd ${{ matrix.module }}/ && ./gradlew connectedCheck
+          script: cd ${{ matrix.module }}/ && ./gradlew connectedCheck --stacktrace
 
       - name: Upload Reports
         uses: actions/upload-artifact@v1
         with:
           name: ${{ matrix.module }} - Tests reports
           path: ${{ matrix.module }}/app/build/reports
-
+      
+      - name: Run jacoco tests coverage
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          #api-level: ${{ matrix.api-level }}
+          #target: ${{ matrix.target }}
+          api-level: 29
+          arch: x86
+          profile: Nexus 6
+          avd-name: test
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: cd ${{ matrix.module }}/ && ./gradlew jacocoTestReport --stacktrace
+        
   generate-apk:
     name: Generate apk
     runs-on: ubuntu-latest
