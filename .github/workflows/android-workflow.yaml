@@ -14,12 +14,12 @@ jobs:
         #api-level: [22, 23, 29]
         #target: [default, google_apis]
         module:
-          - 16-AndroidUnitTestingWithMockito
-          - 17-EspressoTestingAndScreenRobots-GettingStarted
-          - 18-UITestingWithKakao-GettingStarted
-          - 19-TestingRESTAPIsUsingMockWebServer
+          #- 16-AndroidUnitTestingWithMockito
+          #- 17-EspressoTestingAndScreenRobots-GettingStarted
+          #- 18-UITestingWithKakao-GettingStarted
+          #- 19-TestingRESTAPIsUsingMockWebServer
           - 20-Test-DrivenDevelopmentTutorialForAndroid-GettingStarted
-          - 22-ContinuousIntegrationforAndroid
+          #- 22-ContinuousIntegrationforAndroid
     steps:
       - name: Checkout
         uses: actions/checkout@v2
