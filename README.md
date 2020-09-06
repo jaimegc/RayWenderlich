@@ -94,6 +94,10 @@ https://www.raywenderlich.com/10562143-continuous-integration-for-android
 
 https://www.raywenderlich.com/817602-mvi-architecture-for-android-tutorial-getting-started
 
+### 24) MvRx Android on Autopilot: Getting Started
+
+https://www.raywenderlich.com/8121045-mvrx-android-on-autopilot-getting-started
+
 
 ## ARTICLES
 
