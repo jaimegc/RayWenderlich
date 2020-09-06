@@ -11,6 +11,9 @@ import com.raywenderlich.android.emojicalculator.ScreenRobot.Companion.withRobot
 import org.hamcrest.Matchers.allOf
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
@@ -66,10 +69,10 @@ class MainActivityTest {
             .perform(click())
 
         onView(withId(R.id.textTip))
-            .check(matches(withText("1,98")))
+            .check(matches(withText(1.98.formatDecimals())))
 
         onView(withId(R.id.textTotal))
-            .check(matches(withText("12,98")))
+            .check(matches(withText(12.98.formatDecimals())))
     }
 
     @Test
@@ -84,9 +87,9 @@ class MainActivityTest {
             .perform(click())
 
         onView(withId(R.id.textTip))
-            .check(matches(withText("2,00")))
+            .check(matches(withText(2.0.formatDecimals())))
         onView(withId(R.id.textTotal))
-            .check(matches(withText("13,00")))
+            .check(matches(withText(13.0.formatDecimals())))
     }
 
     /**
@@ -99,8 +102,8 @@ class MainActivityTest {
 
         withRobot(CalculatorScreenRobot::class.java)
             .inputCheckAmountAndSelectOkayButton("11")
-            .verifyTipIsCorrect("1,98")
-            .verifyTotalIsCorrect("12,98")
+            .verifyTipIsCorrect(1.98.formatDecimals())
+            .verifyTotalIsCorrect(12.98.formatDecimals())
     }
 
     @Test
@@ -110,8 +113,21 @@ class MainActivityTest {
         withRobot(CalculatorScreenRobot::class.java)
             .clickOkOnView(R.id.switchRound)
             .inputCheckAmountAndSelectOkayButton("11")
-            .verifyTipIsCorrect("2,00")
-            .verifyTotalIsCorrect("13,00")
+            .verifyTipIsCorrect(2.0.formatDecimals())
+            .verifyTotalIsCorrect(13.0.formatDecimals())
+    }
+
+    private fun Double.formatDecimals(): String = createNumberFormat().format(this)
+
+    private fun createNumberFormat(): NumberFormat {
+        val locale = Locale.getDefault()
+        val result = NumberFormat.getInstance(locale)
+        result.minimumFractionDigits = 2
+        result.maximumFractionDigits = 2
+
+        if (result is DecimalFormat) result.isDecimalSeparatorAlwaysShown = false
+
+        return result
     }
 
     /**

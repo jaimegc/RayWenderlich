@@ -1,0 +1,90 @@
+name: CI Workflow
+on:
+  push:
+    branches:
+      - master
+      #- dev
+  pull_request:
+    branches:
+      - master
+      #- dev
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
+
+jobs:
+  test:
+    name: Build and run tests
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        #api-level: [22, 23, 29]
+        #target: [default, google_apis]
+        module:
+          - 16-AndroidUnitTestingWithMockito
+          - 17-EspressoTestingAndScreenRobots-GettingStarted
+          - 18-UITestingWithKakao-GettingStarted
+          - 19-TestingRESTAPIsUsingMockWebServer
+          #- 20-Test-DrivenDevelopmentTutorialForAndroid-GettingStarted ==> There is a problem in the instrumentation tests. It works in local but not here :[
+          - 22-ContinuousIntegrationforAndroid
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Run unit tests
+        run: cd ${{ matrix.module }}/ && ./gradlew testDebugUnitTest --stacktrace
+
+      - name: Run instrumentation tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          #api-level: ${{ matrix.api-level }}
+          #target: ${{ matrix.target }}
+          api-level: 29
+          arch: x86
+          profile: Nexus 6
+          avd-name: test
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: cd ${{ matrix.module }}/ && ./gradlew connectedCheck --stacktrace
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.module }} - Tests reports
+          path: ${{ matrix.module }}/app/build/reports
+        
+  generate-apk:
+    name: Generate apk
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module:
+          - 16-AndroidUnitTestingWithMockito
+          - 17-EspressoTestingAndScreenRobots-GettingStarted
+          - 18-UITestingWithKakao-GettingStarted
+          - 19-TestingRESTAPIsUsingMockWebServer
+          - 20-Test-DrivenDevelopmentTutorialForAndroid-GettingStarted
+          - 22-ContinuousIntegrationforAndroid
+    needs:
+      - test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Generate apk
+        run: cd ${{ matrix.module }}/ && ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.module }} - apk-debug
+          path: ${{ matrix.module }}/app/build/outputs/apk/debug/app-debug.apk
