@@ -90,11 +90,15 @@ https://www.raywenderlich.com/240-android-accessibility-tutorial-getting-started
 
 https://www.raywenderlich.com/10562143-continuous-integration-for-android
 
-### 23) MVI Architecture for Android Tutorial: Getting Started
+### 23) Testing Android Architecture Components
+
+https://www.raywenderlich.com/12678525-testing-android-architecture-components
+
+### 24) MVI Architecture for Android Tutorial: Getting Started
 
 https://www.raywenderlich.com/817602-mvi-architecture-for-android-tutorial-getting-started
 
-### 24) MvRx Android on Autopilot: Getting Started
+### 25) MvRx Android on Autopilot: Getting Started
 
 https://www.raywenderlich.com/8121045-mvrx-android-on-autopilot-getting-started
 
