@@ -15,9 +15,28 @@ android {
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    
+
+    javaCompileOptions {
+      annotationProcessorOptions {
+        // This lets you export your database schema into a JSON file at compile time.
+        arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+      }
+    }
   }
 
+  android {
+    testOptions {
+      unitTests.all {
+        systemProperty 'robolectric.dependency.repo.url', 'https://local-mirror/repo'
+        systemProperty 'robolectric.dependency.repo.id', 'local'
+      }
+    }
+
+    sourceSets {
+      // Adds exported schema location into the app assets
+      androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+  }
 
   buildTypes {
     release {
@@ -69,6 +88,7 @@ dependencies {
   androidTestImplementation "android.arch.persistence.room:testing:1.1.1"
   androidTestImplementation 'androidx.test.ext:junit:1.1.1'
   androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+  androidTestImplementation 'androidx.room:room-testing:2.2.5'
 
 
   // AndroidX Test - JVM testing

@@ -108,3 +108,10 @@ https://www.raywenderlich.com/8121045-mvrx-android-on-autopilot-getting-started
 ### 1) Common Design Patterns for Android with Kotlin
 
 https://www.raywenderlich.com/470-common-design-patterns-for-android-with-kotlin
+
+
+## VIDEOS
+
+### 1) Jetpack Compose Basics
+
+https://www.raywenderlich.com/17332237-jetpack-compose
