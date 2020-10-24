@@ -71,8 +71,8 @@ jobs:
           - 20-Test-DrivenDevelopmentTutorialForAndroid-GettingStarted
           - 22-ContinuousIntegrationforAndroid
           - 23-TestingAndroidArchitectureComponents
-    #needs:
-      # - test ==> I commment this to use 20 & 23 tests that fail in unit tests
+    needs:
+      - test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
