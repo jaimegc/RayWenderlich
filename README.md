@@ -90,9 +90,17 @@ https://www.raywenderlich.com/240-android-accessibility-tutorial-getting-started
 
 https://www.raywenderlich.com/10562143-continuous-integration-for-android
 
-### 23) MVI Architecture for Android Tutorial: Getting Started
+### 23) Testing Android Architecture Components
+
+https://www.raywenderlich.com/12678525-testing-android-architecture-components
+
+### 24) MVI Architecture for Android Tutorial: Getting Started
 
 https://www.raywenderlich.com/817602-mvi-architecture-for-android-tutorial-getting-started
+
+### 25) MvRx Android on Autopilot: Getting Started
+
+https://www.raywenderlich.com/8121045-mvrx-android-on-autopilot-getting-started
 
 
 ## ARTICLES
@@ -100,3 +108,10 @@ https://www.raywenderlich.com/817602-mvi-architecture-for-android-tutorial-getti
 ### 1) Common Design Patterns for Android with Kotlin
 
 https://www.raywenderlich.com/470-common-design-patterns-for-android-with-kotlin
+
+
+## VIDEOS
+
+### 1) Jetpack Compose Basics
+
+https://www.raywenderlich.com/17332237-jetpack-compose
